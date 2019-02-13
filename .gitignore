@@ -1,0 +1,16 @@
+*.swp
+*~
+*.log
+*.dvi
+*.aux
+*.blg
+*.ps
+*.nav
+*.out
+*.snm
+*.toc
+
+*.exe
+*.out
+
+bin/
