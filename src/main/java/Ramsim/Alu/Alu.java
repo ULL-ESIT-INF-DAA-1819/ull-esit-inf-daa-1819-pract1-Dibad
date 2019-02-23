@@ -30,7 +30,7 @@ public class Alu {
   public void cycle() {
     fetch();
     execute();
-    if(debug)
+    if (debug)
       printDebugState();
   }
 
@@ -40,7 +40,8 @@ public class Alu {
   }
 
   public void printDebugState() {
-    System.out.println("IP: " + ip_);
+    System.out.println(String.format("IP: %d", ip_ - 1));
+    System.out.println("Opcode: " + opcode_);
     System.out.println("Data memory:\n" + memory_.dataMemory_);
     System.out.println("Input tape:\n" + input_);
     System.out.println("Output tape:\n" + output_);
@@ -67,11 +68,11 @@ public class Alu {
       break;
 
     case MUL:
-      // mul();
+      mul();
       break;
 
     case DIV:
-      // div();
+      div();
       break;
 
     case READ:
@@ -83,15 +84,15 @@ public class Alu {
       break;
 
     case JUMP:
-      //jump();
+      jump();
       break;
 
     case JZERO:
-      //jzero();
+      jzero();
       break;
 
     case JGTZ:
-      //jgtz();
+      jgtz();
       break;
 
     case HALT:
@@ -122,12 +123,35 @@ public class Alu {
     memory_.setAcc((int)opcode_.getArgument() + memory_.getAcc());
   }
 
+  private void mul() {
+    memory_.setAcc((int)opcode_.getArgument() * memory_.getAcc());
+  }
+
+  private void div() {
+    memory_.setAcc((int)opcode_.getArgument() / memory_.getAcc());
+  }
+
   private void read() {
     memory_.putInRegister((int)opcode_.getArgument(), input_.read());
   }
 
   private void write() {
     output_.write((int)opcode_.getArgument());
+  }
+
+  private void jump() {
+    System.out.println(memory_.getTag((String)opcode_.getArgument()));
+    ip_ = memory_.getTag((String)opcode_.getArgument());
+  }
+
+  private void jzero() {
+    if (memory_.getAcc() == 0)
+      ip_ = memory_.getTag((String)opcode_.getArgument());
+  }
+
+  private void jgtz() {
+    if (memory_.getAcc() > 0)
+      ip_ = memory_.getTag((String)opcode_.getArgument());
   }
 
   private void halt() {

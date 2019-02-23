@@ -40,6 +40,7 @@ public class Ramsim {
 
       } catch (RuntimeException e) { // Handle exceptions better
         System.out.println(e);
+        e.printStackTrace();
         quit_ = true;
       }
     }
@@ -61,7 +62,7 @@ public class Ramsim {
 
           // Check if first element is a tag and save it
           if (splitted.get(0).endsWith(":")) {
-            memory_.setTag(splitted.get(0), lineNumber);
+            memory_.setTag(splitted.get(0).replace(":", ""), lineNumber);
             splitted.remove(0);
           }
 
