@@ -5,7 +5,7 @@ import java.util.Hashtable;
 public class Memory<T> {
   private Hashtable<Integer, T> data_ = new Hashtable<Integer, T>();
 
-  public T get(int index) {
+  public T get(int index) throws IllegalArgumentException {
     T value = data_.get(index);
 
     if(value == null)
