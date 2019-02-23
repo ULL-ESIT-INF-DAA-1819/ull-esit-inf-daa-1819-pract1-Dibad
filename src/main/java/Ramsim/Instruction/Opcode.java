@@ -3,16 +3,16 @@ package Ramsim.Instruction;
 import Ramsim.Instruction.Op.Operand;
 
 public class Opcode {
-  private int identifier_;
+  private InstructId id_;
   private Operand<?> argument_;
 
-  public Opcode(int id, Operand<?> arg) {
-    identifier_ = id;
+  public Opcode(InstructId id, Operand<?> arg) {
+    id_ = id;
     argument_ = arg;
   }
 
-  public int getId() {
-    return identifier_;
+  public InstructId getId() {
+    return id_;
   }
 
   public Object getArgument() {

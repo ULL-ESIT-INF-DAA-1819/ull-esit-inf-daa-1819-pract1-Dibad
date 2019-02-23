@@ -8,16 +8,22 @@ import Ramsim.Io.InputUnit;
 import Ramsim.Io.OutputUnit;
 
 public class Alu {
-  private int ip_ = 0; // Instruction pointer
-
-  // Components
+  // Component links
   private MemoryManager memory_;
   private InputUnit input_;
   private OutputUnit output_;
-  private Opcode opcode_;
 
-  public Alu(MemoryManager memory) {
+  // Alu attributes
+  private Opcode opcode_;
+  private int ip_ = 0; // Instruction pointer
+
+
+  public Alu(MemoryManager memory,
+             InputUnit input,
+             OutputUnit output) {
     memory_ = memory;
+    input_ = input;
+    output_ = output;
   }
 
   public void cycle() {
@@ -32,59 +38,59 @@ public class Alu {
 
   public void execute() {
     // Get function pointer from opcode ID
-    switch(opcode_.getId()) {
-      case 0:
-        load();
-        break;
+    switch (opcode_.getId()) {
+    case LOAD:
+      load();
+      break;
 
-      case 1:
-        store();
-        break;
+    case STORE:
+      store();
+      break;
 
-      case 2:
-        add();
-        break;
+    case ADD:
+      add();
+      break;
 
-      case 3:
-        sub();
-        break;
+    case SUB:
+      sub();
+      break;
 
-      case 4:
-        // mul();
-        break;
+    case MUL:
+      // mul();
+      break;
 
-      case 5:
-        // div();
-        break;
+    case DIV:
+      // div();
+      break;
 
-      case 6:
-        read();
-        break;
+    case READ:
+      read();
+      break;
 
-      case 7:
-        write();
-        break;
+    case WRITE:
+      write();
+      break;
 
-      case 8:
-        //jump();
-        break;
+    case JUMP:
+      //jump();
+      break;
 
-      case 9:
-        //jzero();
-        break;
+    case JZERO:
+      //jzero();
+      break;
 
-      case 10:
-        //jgtz();
-        break;
+    case JGTZ:
+      //jgtz();
+      break;
 
-      case 11:
-        //halt();
-        break;
+    case HALT:
+      //halt();
+      break;
 
-      default:
-        throw new NoSuchElementException
-          ("Cannot find an instruction associated with opcode" +
-           opcode_.getId() + "!");
+    default:
+      throw new NoSuchElementException
+      ("Cannot find an instruction associated with opcode" +
+       opcode_.getId() + "!");
     }
   }
 
