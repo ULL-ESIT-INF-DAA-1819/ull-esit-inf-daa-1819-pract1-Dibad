@@ -3,6 +3,9 @@ package Ramsim;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import Ramsim.Mem.Memory;
+
+
 public class MemoryTest {
 
   private Memory<Integer> memory_;
@@ -13,9 +16,11 @@ public class MemoryTest {
   }
 
   @Test
-  public void testReplaceValue() {
-
-    assertTrue(memory_.get(2) == null); // Initially all Registers are null
+  public void testGetAndSetValue() {
+    // Exception is thrown when trying to acces a null register
+    assertThrows(IllegalArgumentException.class, () -> {
+      memory_.get(2);
+    });
 
     memory_.put(2, 1); // Put 1 in R2
     assertTrue(memory_.get(2) == 1);
