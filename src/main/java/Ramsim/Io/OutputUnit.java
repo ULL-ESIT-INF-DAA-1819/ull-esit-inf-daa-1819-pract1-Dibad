@@ -11,10 +11,10 @@ public class OutputUnit extends Unit {
 
   public void storeTapeToFile() throws IllegalStateException {
     try(FileWriter fileWriter = new FileWriter(filepath_)) {
-      for(var value : tape_)
+      for (var value : tape_)
         fileWriter.write(String.format("%d ", value));
 
-    } catch(IOException e) {
+    } catch (IOException e) {
       throw new IllegalStateException("Error writing to the output file!", e);
     }
   }

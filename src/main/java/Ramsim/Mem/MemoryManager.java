@@ -9,13 +9,25 @@ public class MemoryManager {
   private static final int ACC_INDEX = 0; // Which register corresponds to acc
 
   // Data memory operations
-  public int getAcc() { return dataMemory_.get(ACC_INDEX); }
-  public void setAcc(int value) { dataMemory_.put(ACC_INDEX, value); }
+  public int getAcc() {
+    return dataMemory_.get(ACC_INDEX);
+  }
+  public void setAcc(int value) {
+    dataMemory_.put(ACC_INDEX, value);
+  }
 
-  public int getRegister(int index) { return dataMemory_.get(index); }
-  public void putInRegister(int index, int value) { dataMemory_.put(index, value); }
+  public int getRegister(int index) {
+    return dataMemory_.get(index);
+  }
+  public void putInRegister(int index, int value) {
+    dataMemory_.put(index, value);
+  }
 
   // Program memory operations
-  public Opcode getInstruction(int index) { return programMemory_.get(index); }
-  public void putInRegister(int index, Opcode inst) { programMemory_.put(index, inst); }
+  public Opcode getInstruction(int index) {
+    return programMemory_.get(index);
+  }
+  public void putInRegister(int index, Opcode inst) {
+    programMemory_.put(index, inst);
+  }
 }

@@ -11,7 +11,9 @@ public class Opcode {
     argument_ = arg;
   }
 
-  public int getId() { return identifier_; }
+  public int getId() {
+    return identifier_;
+  }
 
   public Object getArgument() {
     return argument_.getValue();

@@ -11,5 +11,7 @@ public abstract class Unit {
     filepath_ = filepath;
   }
 
-  public void changeFilepath(String filepath) { filepath_ = filepath; }
+  public void changeFilepath(String filepath) {
+    filepath_ = filepath;
+  }
 }
