@@ -13,5 +13,6 @@ public class App {
   public static void main(String[] args) {
     Ramsim rms = new Ramsim("tests_ram/test1.ram",
         "src/test/java/Ramsim/test.txt", "test.txt");
+    rms.execute();
   }
 }

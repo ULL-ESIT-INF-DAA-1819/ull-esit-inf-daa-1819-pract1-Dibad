@@ -14,4 +14,9 @@ public abstract class Unit {
   public void changeFilepath(String filepath) {
     filepath_ = filepath;
   }
+
+  @Override
+  public String toString() {
+    return tape_.toString();
+  }
 }

@@ -38,9 +38,9 @@ public class Ramsim {
       try {
         alu_.cycle();
 
-      } catch (Exception e) { // Handle exceptions better
-        System.out.println("Exception occured during cycle()");
-        e.printStackTrace();
+      } catch (RuntimeException e) { // Handle exceptions better
+        System.out.println(e);
+        quit_ = true;
       }
     }
   }
@@ -103,7 +103,8 @@ public class Ramsim {
         }
       }
 
-      System.out.println(memory_.programMemory_.toString());
+      System.out.println("Program loaded!\n" + memory_.programMemory_.toString());
+      System.out.println("Tags:\n" + memory_.tags_);
 
     } catch (IOException e) { // Handle exceptions better
       e.printStackTrace();

@@ -17,6 +17,8 @@ public class Alu {
   private Opcode opcode_;
   private int ip_ = 0; // Instruction pointer
 
+  boolean debug = true;
+
   public Alu(MemoryManager memory,
              InputUnit input,
              OutputUnit output) {
@@ -28,11 +30,21 @@ public class Alu {
   public void cycle() {
     fetch();
     execute();
+    if(debug)
+      printDebugState();
   }
 
   public void fetch() {
     opcode_ = memory_.getInstruction(ip_);
     ++ip_;
+  }
+
+  public void printDebugState() {
+    System.out.println("IP: " + ip_);
+    System.out.println("Data memory:\n" + memory_.dataMemory_);
+    System.out.println("Input tape:\n" + input_);
+    System.out.println("Output tape:\n" + output_);
+    System.out.println();
   }
 
   public void execute() {
@@ -83,7 +95,7 @@ public class Alu {
       break;
 
     case HALT:
-      //halt();
+      halt();
       break;
 
     default:
@@ -116,5 +128,10 @@ public class Alu {
 
   private void write() {
     output_.write((int)opcode_.getArgument());
+  }
+
+  private void halt() {
+    output_.storeTapeToFile();
+    throw new RuntimeException("Program was requested to finish");
   }
 }

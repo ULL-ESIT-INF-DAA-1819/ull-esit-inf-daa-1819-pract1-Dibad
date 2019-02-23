@@ -7,7 +7,7 @@ import Ramsim.Instruction.Opcode;
 public class MemoryManager {
   public Memory<Integer> dataMemory_ = new Memory<Integer>(); // PROVISIONAL!!
   public Memory<Opcode> programMemory_ = new Memory<Opcode>();
-  private HashMap<String, Integer> tags_ = new HashMap<String, Integer>();
+  public HashMap<String, Integer> tags_ = new HashMap<String, Integer>();
 
   private static final int ACC_INDEX = 0; // Which register corresponds to acc
 
