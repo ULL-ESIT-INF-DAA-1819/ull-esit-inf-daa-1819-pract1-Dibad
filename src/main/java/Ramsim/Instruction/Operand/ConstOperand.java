@@ -11,5 +11,9 @@ public class ConstOperand<T> extends Operand<T> {
   public T getValue() {
     return constValue_;
   }
-}
 
+  @Override
+  public String toString() {
+    return constValue_.toString();
+  }
+}

@@ -1,12 +1,14 @@
 package Ramsim.Instruction;
 
+import java.util.ArrayList;
+
 import Ramsim.Instruction.Operand.Operand;
 
 public class Opcode {
   private InstructId id_;
-  private Operand<?> argument_;
+  private final ArrayList<Operand<?>> argument_;
 
-  public Opcode(InstructId id, Operand<?> arg) {
+  public Opcode(InstructId id, ArrayList<Operand<?>> arg) {
     id_ = id;
     argument_ = arg;
   }
@@ -15,7 +17,11 @@ public class Opcode {
     return id_;
   }
 
-  public Object getArgument() {
-    return argument_.getValue();
+  public Object getArgument() { // PROVISIONAL
+    return argument_.get(0).getValue();
+  }
+
+  public String toString() {
+    return String.format("%s%s", id_.toString(), argument_.toString());
   }
 }

@@ -3,11 +3,15 @@
  */
 package Ramsim;
 
+import Ramsim.Ramsim;
+
 public class App {
   public String getGreeting() {
     return "Hello world.";
   }
 
   public static void main(String[] args) {
+    Ramsim rms = new Ramsim("tests_ram/test1.ram",
+        "src/test/java/Ramsim/test.txt", "test.txt");
   }
 }

@@ -17,7 +17,6 @@ public class Alu {
   private Opcode opcode_;
   private int ip_ = 0; // Instruction pointer
 
-
   public Alu(MemoryManager memory,
              InputUnit input,
              OutputUnit output) {

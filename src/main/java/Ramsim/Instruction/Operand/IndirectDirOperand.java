@@ -15,4 +15,9 @@ public class IndirectDirOperand<T> extends Operand<T> {
   public T getValue() {
     return memory_.get((int)memory_.get(index_));
   }
+
+  @Override
+  public String toString() {
+    return String.format("*%d", index_);
+  }
 }
