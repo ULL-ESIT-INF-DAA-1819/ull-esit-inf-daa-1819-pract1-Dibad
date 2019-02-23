@@ -1,28 +1,29 @@
 package Ramsim.Io;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Scanner;
-import java.util.NoSuchElementException;
-import java.lang.IllegalStateException;
+import java.io.File;
+import java.io.IOException;
 
-public class InputUnit {
+public class InputUnit extends Unit {
+  int readingHead_ = 0;
 
-  int pos_ = 0;
-  Scanner fileReader_;
-
-  public InputUnit(String filepath) throws FileNotFoundException {
-    fileReader_ = new Scanner(new File(filepath));
+  public InputUnit(String filepath) throws IllegalStateException {
+    super(filepath);
+    loadFileToTape();
   }
 
-  public int nextValue() throws IllegalStateException {
-    ++pos_;
-    try {
-      return fileReader_.nextInt();
-    } catch(NoSuchElementException e) {
-      throw new IllegalStateException(
-          String.format("Error reading the input tape at position %d", pos_),
-          e);
+  public void loadFileToTape() throws IllegalStateException {
+    try(Scanner fileReader = new Scanner(new File(filepath_))) {
+      while (fileReader.hasNextInt()) {
+        tape_.add(fileReader.nextInt());
+      }
+
+    } catch (IOException e) {
+      throw new IllegalStateException("Error reading the input file!", e);
     }
+  }
+
+  public int read() throws IndexOutOfBoundsException {
+    return tape_.get(readingHead_++);
   }
 }

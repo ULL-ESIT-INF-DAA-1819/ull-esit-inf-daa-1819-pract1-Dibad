@@ -2,10 +2,14 @@ package Ramsim.Alu;
 
 import Ramsim.Mem.MemoryManager;
 import Ramsim.Instruction.Opcode;
+import Ramsim.Io.InputUnit;
 
 public class Alu {
   private int ip_ = 0; // Instruction pointer
+
+  // Components
   private MemoryManager memory_;
+  private InputUnit input_;
   private Opcode opcode_;
 
   public Alu(MemoryManager memory) {
@@ -41,5 +45,9 @@ public class Alu {
 
   private void sub() {
     memory_.setAcc((int)opcode_.getArgument() + memory_.getAcc());
+  }
+
+  private void read() {
+    memory_.putInRegister((int)opcode_.getArgument(), input_.read());
   }
 }
