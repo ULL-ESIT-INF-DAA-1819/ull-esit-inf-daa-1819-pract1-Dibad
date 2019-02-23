@@ -3,7 +3,6 @@ package Ramsim;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.List;
 import java.io.File;
 import java.io.IOException;
 
@@ -70,35 +69,36 @@ public class Ramsim {
           InstructId id = InstructId.valueOf(splitted.get(0).toUpperCase());
           splitted.remove(0);
 
-
           // Get list of operands
           ArrayList<Operand<?>> op = new ArrayList<Operand<?>>();
 
           if (!splitted.isEmpty()) {
-            for (var s : splitted) {
-              if (s.startsWith("=")) { // DIRECT DIR
-                int index = Integer.parseInt(s.substring(1));
+            for (var arg : splitted) {
+              if (arg.startsWith("=")) { // DIRECT DIR
+                int index = Integer.parseInt(arg.substring(1)); // Remove =
                 op.add(new DirectDirOperand<Integer>(index, memory_.dataMemory_));
 
-              } else if (s.startsWith("*")) { // INDIRECT DIR
-                int index = Integer.parseInt(s.substring(1));
+              } else if (arg.startsWith("*")) { // INDIRECT DIR
+                int index = Integer.parseInt(arg.substring(1)); // Remove *
                 op.add(new IndirectDirOperand<Integer>(index,
                                                        memory_.dataMemory_));
 
               } else { // CONSTANT
                 try {
+                  // Try to add as Integer
                   op.add(new
-                         ConstOperand<Integer>(Integer.parseInt(s)));
+                         ConstOperand<Integer>(Integer.parseInt(arg)));
 
                 } catch (NumberFormatException e) {
-                  op.add(new ConstOperand<String>(s));
+                  // Add as string (label)
+                  op.add(new ConstOperand<String>(arg));
                 }
               }
             }
           }
 
+          // Save instruction in program memory
           memory_.putInRegister(lineNumber, new Opcode(id, op));
-
           ++lineNumber;
         }
       }

@@ -1,5 +1,5 @@
 # Programa que lee los elementos la cinta de entrada hasta
-# que encuentre un 0 y escribe el doble del valor leído a la 
+# que encuentre un 0 y escribe el doble del valor leído a la
 # cinta de salida (el valor 0 no se copia)
 
 bucle:	READ 1
