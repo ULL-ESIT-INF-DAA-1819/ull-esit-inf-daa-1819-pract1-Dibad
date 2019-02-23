@@ -1,6 +1,6 @@
-package Ramsim.Instruction.Op;
+package Ramsim.Instruction.Operand;
 
-import Ramsim.Mem.Memory;
+import Ramsim.Memory.Memory;
 
 public class IndirectDirOperand<T> extends Operand<T> {
   private int index_;

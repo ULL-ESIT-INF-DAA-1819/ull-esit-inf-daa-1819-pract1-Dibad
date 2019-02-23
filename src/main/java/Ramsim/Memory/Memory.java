@@ -1,4 +1,4 @@
-package Ramsim.Mem;
+package Ramsim.Memory;
 
 import java.util.Hashtable;
 

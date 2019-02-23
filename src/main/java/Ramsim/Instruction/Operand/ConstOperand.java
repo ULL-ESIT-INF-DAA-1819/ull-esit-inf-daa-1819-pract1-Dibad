@@ -1,4 +1,4 @@
-package Ramsim.Instruction.Op;
+package Ramsim.Instruction.Operand;
 
 public class ConstOperand<T> extends Operand<T> {
   private T constValue_;
@@ -12,3 +12,4 @@ public class ConstOperand<T> extends Operand<T> {
     return constValue_;
   }
 }
+

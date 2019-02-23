@@ -3,7 +3,7 @@ package Ramsim;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import Ramsim.Mem.Memory;
+import Ramsim.Memory.Memory;
 
 
 public class MemoryTest {

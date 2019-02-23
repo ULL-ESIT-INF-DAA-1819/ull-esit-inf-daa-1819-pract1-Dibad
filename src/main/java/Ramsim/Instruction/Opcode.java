@@ -1,6 +1,6 @@
 package Ramsim.Instruction;
 
-import Ramsim.Instruction.Op.Operand;
+import Ramsim.Instruction.Operand.Operand;
 
 public class Opcode {
   private InstructId id_;

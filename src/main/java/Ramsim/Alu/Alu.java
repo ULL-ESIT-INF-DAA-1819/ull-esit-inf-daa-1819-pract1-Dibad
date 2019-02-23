@@ -2,7 +2,7 @@ package Ramsim.Alu;
 
 import java.util.NoSuchElementException;
 
-import Ramsim.Mem.MemoryManager;
+import Ramsim.Memory.MemoryManager;
 import Ramsim.Instruction.Opcode;
 import Ramsim.Io.InputUnit;
 import Ramsim.Io.OutputUnit;

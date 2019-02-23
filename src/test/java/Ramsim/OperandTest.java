@@ -3,8 +3,8 @@ package Ramsim;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import Ramsim.Instruction.Op.*;
-import Ramsim.Mem.Memory;
+import Ramsim.Instruction.Operand.*;
+import Ramsim.Memory.Memory;
 
 
 public class OperandTest {
