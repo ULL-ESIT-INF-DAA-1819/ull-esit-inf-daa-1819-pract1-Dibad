@@ -17,7 +17,12 @@ build
 
 #Java
 *.class
-
-*.txt
+input.txt
+output.txt
+test.txt
+input_tape.in
+output_tape.out
+input.in
+output.out
 
 bin/
