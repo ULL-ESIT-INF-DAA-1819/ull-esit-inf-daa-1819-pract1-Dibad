@@ -184,4 +184,56 @@ public class AluTest {
       assertTrue(dataMemory_.get(Alu.ACC) == 10);
     }
   }
+
+  @Nested
+  @DisplayName("SUB")
+  class Sub {
+    @Test
+    public void testSubConstant() {
+      // Sub =3: Subtract the constant 3 to the ACC and store the result in the
+      // ACC
+      args_.add(new ConstOperand<>(3));
+      var opcode = new Opcode(InstructId.SUB, args_);
+
+      dataMemory_.put(Alu.ACC, 4); // ACC=4
+
+      programMemory_.add(opcode);
+      alu_.cycle(); // ACC=4 - 3
+
+      assertTrue(dataMemory_.get(Alu.ACC) == 1);
+    }
+
+    @Test
+    public void testSubDirect() {
+      // Sub 3: Subtract the content of R3 to the ACC and store the result in
+      // the ACC
+      args_.add(new DirectDirOperand<>(3, dataMemory_));
+      var opcode = new Opcode(InstructId.SUB, args_);
+
+      dataMemory_.put(Alu.ACC, 4);  // ACC=4
+      dataMemory_.put(3, 5);        // R3=5
+
+      programMemory_.add(opcode);
+      alu_.cycle(); // ACC=4 - R3=5
+
+      assertTrue(dataMemory_.get(Alu.ACC) == -1);
+    }
+
+    @Test
+    public void testSubIndirect() {
+      // Sub *3: Subtract the content of the Register pointed by R3 to the ACC
+      // and store the result in the ACC
+      args_.add(new IndirectDirOperand<>(3, dataMemory_));
+      var opcode = new Opcode(InstructId.SUB, args_);
+
+      dataMemory_.put(Alu.ACC, 4);  // ACC=4
+      dataMemory_.put(3, 2);        // R3=2
+      dataMemory_.put(2, 4);        // R2=4
+
+      programMemory_.add(opcode);
+      alu_.cycle(); // ACC=4 - (R3=2 -> R2=4)
+
+      assertTrue(dataMemory_.get(Alu.ACC) == 0);
+    }
+  }
 }
