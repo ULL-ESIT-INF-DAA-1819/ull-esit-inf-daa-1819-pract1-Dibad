@@ -254,4 +254,44 @@ public class AluTest {
       assertTrue(dataMemory_.get(Alu.ACC) == 70);
     }
   }
+
+  @Nested
+  @DisplayName("DIV")
+  class Div {
+    public void testDivConstant() {
+      // Div =1: Divide the constant 1 by the ACC and store the result in the
+      // ACC
+      args_.add(new ConstOperand<>(1));
+      var opcode = new Opcode(InstructId.DIV, args_);
+
+      programMemory_.add(opcode);
+      alu_.cycle(); // ACC=5 / 1
+
+      assertTrue(dataMemory_.get(Alu.ACC) == 5);
+    }
+
+    public void testDivDirect() {
+      // Div 1: Divide the content of R1 by the ACC and store the result in the
+      // ACC
+      args_.add(new DirectDirOperand<>(1, dataMemory_));
+      var opcode = new Opcode(InstructId.DIV, args_);
+
+      programMemory_.add(opcode);
+      alu_.cycle(); // ACC=5 / R1=2
+
+      assertTrue(dataMemory_.get(Alu.ACC) == 2);
+    }
+
+    public void testDivIndirect() {
+      // Div *1: Divide the content of the Register pointed by R1 by the ACC and
+      // store the result in the ACC
+      args_.add(new IndirectDirOperand<>(1, dataMemory_));
+      var opcode = new Opcode(InstructId.DIV, args_);
+
+      programMemory_.add(opcode);
+      alu_.cycle(); // ACC=5 / (R1=2 -> R2=4)
+
+      assertTrue(dataMemory_.get(Alu.ACC) == 0);
+    }
+  }
 }
