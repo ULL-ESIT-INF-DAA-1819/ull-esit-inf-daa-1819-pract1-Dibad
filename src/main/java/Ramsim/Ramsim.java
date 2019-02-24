@@ -24,6 +24,8 @@ public class Ramsim {
   private OutputUnit output_;
   private Alu alu_;
 
+  // Flags
+  private boolean debug_;
 
   // Constructor
 
@@ -39,6 +41,8 @@ public class Ramsim {
     output_ = new OutputUnit(outputFilePath);
     alu_ = new Alu(dataMemory_, programMemory_, tags_, input_, output_, debug);
 
+    debug_ = debug;
+
     loadProgram(programFilePath);
   }
 
@@ -48,9 +52,13 @@ public class Ramsim {
         alu_.cycle();
 
       } catch (RuntimeException e) {
-        System.out.println(" -> An exception has occurred:");
-        e.printStackTrace();
+        System.out.println("RAMSIM::ERROR::An exception has occurred:\n" + e);
+        if (debug_)
+          e.printStackTrace();
+
         alu_.halt();
+
+        throw e;
       }
     }
 
@@ -63,7 +71,6 @@ public class Ramsim {
       while (fileReader.hasNextLine()) {
         String line = fileReader.nextLine();
 
-        System.out.println(line);
         line = line.replaceAll("#[^\n]*", ""); // Remove # comments
 
         if (!line.isEmpty()) {
@@ -117,7 +124,7 @@ public class Ramsim {
         }
       }
 
-      System.out.println(String.format("Program loaded! %d instructions: %s",
+      System.out.println(String.format("Program loaded!\n%d instructions:\n%s",
                                        programMemory_.size(), programMemory_));
       System.out.println("Tags:\n" + tags_ + "\n");
 
