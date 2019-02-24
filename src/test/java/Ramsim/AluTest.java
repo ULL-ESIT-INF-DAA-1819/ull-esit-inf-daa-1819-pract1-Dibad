@@ -384,4 +384,48 @@ public class AluTest {
       assertTrue(output_.peek() == 8);
     }
   }
+
+  @Nested
+  @DisplayName("JUMP")
+  class Jump {
+    @Test
+    public void testJumpConstant() {
+      // JUMP start: Modify IP to point to the instruction with tag 'start'
+      args_.add(new ConstOperand<>("start"));
+      var opcode = new Opcode(InstructId.JUMP, args_);
+
+      tags_.put("start", 0);  // start -> 0
+
+      programMemory_.add(opcode);
+      assertAll(() -> {
+        alu_.cycle(); // IP should point to 0 again
+        alu_.cycle(); // IP should point to 0 again
+        alu_.cycle(); // IP should point to 0 again
+      });
+    }
+
+    @Test
+    public void testJumpDirect() {
+      // JUMP 1: Jump only works with tags, MUST FAIL
+      args_.add(new DirectDirOperand<>(1, dataMemory_));
+      var opcode = new Opcode(InstructId.JUMP, args_);
+
+      programMemory_.add(opcode);
+      assertThrows(IllegalArgumentException.class, () -> {
+        alu_.cycle();
+      });
+    }
+
+    @Test
+    public void testJumpIndirect() {
+      // JUMP *1: Jump only works with tags, MUST FAIL
+      args_.add(new IndirectDirOperand<>(1, dataMemory_));
+      var opcode = new Opcode(InstructId.JUMP, args_);
+
+      programMemory_.add(opcode);
+      assertThrows(IllegalArgumentException.class, () -> {
+        alu_.cycle();
+      });
+    }
+  }
 }

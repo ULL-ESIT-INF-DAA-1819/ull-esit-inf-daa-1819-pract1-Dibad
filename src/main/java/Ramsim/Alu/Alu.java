@@ -1,5 +1,6 @@
 package Ramsim.Alu;
 
+import java.lang.ClassCastException;
 import java.util.NoSuchElementException;
 import java.util.HashMap;
 import java.util.ArrayList;
@@ -163,17 +164,22 @@ public class Alu {
   }
 
   private void jump() {
-    ip_ = tags_.get((String)opcode_.getValue());
+    try {
+      ip_ = tags_.get((String)opcode_.getValue());
+    } catch (ClassCastException e) {
+      throw new IllegalArgumentException(
+        "JUMP instruction must have a tag as argument!", e);
+    }
   }
 
   private void jzero() {
     if (dataMemory_.get(ACC) == 0)
-      ip_ = tags_.get((String)opcode_.getValue());
+      jump();
   }
 
   private void jgtz() {
     if (dataMemory_.get(ACC) > 0)
-      ip_ = tags_.get((String)opcode_.getValue());
+      jump();
   }
 
   public void halt() {
