@@ -21,3 +21,5 @@ build
 input.txt
 output.txt
 test.txt
+
+bin/
