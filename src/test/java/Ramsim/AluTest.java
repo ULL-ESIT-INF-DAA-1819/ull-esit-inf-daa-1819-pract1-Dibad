@@ -28,18 +28,26 @@ public class AluTest {
   private ArrayList<Operand<?>> args_;
 
   @BeforeEach
-  public void setUp() throws Exception {
+  public void resetState() {
     dataMemory_ = new Memory<Integer>();
     programMemory_ = new ArrayList<Opcode>();
     tags_ = new HashMap<String, Integer>();
     input_ = new InputUnit("input.txt");
     output_ = new OutputUnit("output.txt");
     alu_ = new Alu(dataMemory_, programMemory_, tags_, input_, output_, false);
+
     args_ = new ArrayList<Operand<?>>();
+
+    // Fill memory with basic values (Ri= i * 2)
+    dataMemory_.put(0, 5);  // Reset ACC to 5
+    dataMemory_.put(1, 2);
+    dataMemory_.put(2, 4);
+    dataMemory_.put(3, 6);
+    dataMemory_.put(4, 8);
+    dataMemory_.put(5, 10);
+    dataMemory_.put(6, 12);
+    dataMemory_.put(7, 15);
   }
-
-
-  // LOAD
 
   @Nested
   @DisplayName("LOAD")
@@ -51,7 +59,7 @@ public class AluTest {
       var opcode = new Opcode(InstructId.LOAD, args_);
 
       programMemory_.add(opcode);
-      alu_.cycle();
+      alu_.cycle(); // ACC=2
 
       assertTrue(dataMemory_.get(Alu.ACC) == 2);
     }
@@ -62,12 +70,10 @@ public class AluTest {
       args_.add(new DirectDirOperand<>(2, dataMemory_));
       var opcode = new Opcode(InstructId.LOAD, args_);
 
-      dataMemory_.put(2, 5); // R2=5
-
       programMemory_.add(opcode);
-      alu_.cycle();
+      alu_.cycle(); // ACC=R2=4
 
-      assertTrue(dataMemory_.get(Alu.ACC) == 5);
+      assertTrue(dataMemory_.get(Alu.ACC) == 4);
     }
 
     @Test
@@ -76,13 +82,10 @@ public class AluTest {
       args_.add(new IndirectDirOperand<>(2, dataMemory_));
       var opcode = new Opcode(InstructId.LOAD, args_);
 
-      dataMemory_.put(2, 4); // R2=4
-      dataMemory_.put(4, 9); // R4=9
-
       programMemory_.add(opcode);
-      alu_.cycle();
+      alu_.cycle(); // ACC=(R2=4 -> R4=8)
 
-      assertTrue(dataMemory_.get(Alu.ACC) == 9);
+      assertTrue(dataMemory_.get(Alu.ACC) == 8);
     }
   }
 
@@ -96,8 +99,6 @@ public class AluTest {
       args_.add(new ConstOperand<>(1));
       var opcode = new Opcode(InstructId.STORE, args_);
 
-      dataMemory_.put(Alu.ACC, 5); // ACC=5
-
       programMemory_.add(opcode);
       assertThrows(IllegalArgumentException.class, () -> {
         alu_.cycle();
@@ -110,27 +111,22 @@ public class AluTest {
       args_.add(new DirectDirOperand<>(1, dataMemory_));
       var opcode = new Opcode(InstructId.STORE, args_);
 
-      dataMemory_.put(Alu.ACC, 3);
-
       programMemory_.add(opcode);
-      alu_.cycle();
+      alu_.cycle(); // R1=ACC=5
 
       assertTrue(dataMemory_.get(1) == dataMemory_.get(Alu.ACC));
     }
 
     @Test
     public void testStoreIndirect() {
-      // STORE *1: Almacena el aCC en el Registro apuntado por R1
+      // STORE *1: Almacena el ACC en el Registro apuntado por R1
       args_.add(new IndirectDirOperand<>(1, dataMemory_));
       var opcode = new Opcode(InstructId.STORE, args_);
 
-      dataMemory_.put(Alu.ACC, 3); // R0=5
-      dataMemory_.put(1, 4);       // R1=4
-
       programMemory_.add(opcode);
-      alu_.cycle();
+      alu_.cycle(); // (R1=2 -> R2)=ACC=5
 
-      assertTrue(dataMemory_.get(4) == dataMemory_.get(Alu.ACC));
+      assertTrue(dataMemory_.get(2) == dataMemory_.get(Alu.ACC));
     }
   }
 
@@ -143,12 +139,10 @@ public class AluTest {
       args_.add(new ConstOperand<>(2));
       var opcode = new Opcode(InstructId.ADD, args_);
 
-      dataMemory_.put(Alu.ACC, 3); //ACC=3
-
       programMemory_.add(opcode);
-      alu_.cycle(); // ACC=3 + 2
+      alu_.cycle(); // ACC=5 + 2
 
-      assertTrue(dataMemory_.get(Alu.ACC) == 5);
+      assertTrue(dataMemory_.get(Alu.ACC) == 7);
     }
 
     @Test
@@ -158,13 +152,10 @@ public class AluTest {
       args_.add(new DirectDirOperand<>(2, dataMemory_));
       var opcode = new Opcode(InstructId.ADD, args_);
 
-      dataMemory_.put(Alu.ACC, 3);  // ACC=3
-      dataMemory_.put(2, 3);        // R2=3
-
       programMemory_.add(opcode);
-      alu_.cycle(); // ACC=3 + R2=3
+      alu_.cycle(); // ACC=5 + R2=4
 
-      assertTrue(dataMemory_.get(Alu.ACC) == 6);
+      assertTrue(dataMemory_.get(Alu.ACC) == 9);
     }
 
     @Test
@@ -174,14 +165,10 @@ public class AluTest {
       args_.add(new IndirectDirOperand<>(2, dataMemory_));
       var opcode = new Opcode(InstructId.ADD, args_);
 
-      dataMemory_.put(Alu.ACC, 3);  // ACC=3
-      dataMemory_.put(2, 4);        // R2=4
-      dataMemory_.put(4, 7);        // R4=7
-
       programMemory_.add(opcode);
-      alu_.cycle(); // ACC=3 + (R2=4 -> R4=7)
+      alu_.cycle(); // ACC=5 + (R2=4 -> R4=8)
 
-      assertTrue(dataMemory_.get(Alu.ACC) == 10);
+      assertTrue(dataMemory_.get(Alu.ACC) == 13);
     }
   }
 
@@ -195,12 +182,10 @@ public class AluTest {
       args_.add(new ConstOperand<>(3));
       var opcode = new Opcode(InstructId.SUB, args_);
 
-      dataMemory_.put(Alu.ACC, 4); // ACC=4
-
       programMemory_.add(opcode);
-      alu_.cycle(); // ACC=4 - 3
+      alu_.cycle(); // ACC=5 - 3
 
-      assertTrue(dataMemory_.get(Alu.ACC) == 1);
+      assertTrue(dataMemory_.get(Alu.ACC) == 2);
     }
 
     @Test
@@ -210,11 +195,8 @@ public class AluTest {
       args_.add(new DirectDirOperand<>(3, dataMemory_));
       var opcode = new Opcode(InstructId.SUB, args_);
 
-      dataMemory_.put(Alu.ACC, 4);  // ACC=4
-      dataMemory_.put(3, 5);        // R3=5
-
       programMemory_.add(opcode);
-      alu_.cycle(); // ACC=4 - R3=5
+      alu_.cycle(); // ACC=5 - R3=6
 
       assertTrue(dataMemory_.get(Alu.ACC) == -1);
     }
@@ -226,14 +208,10 @@ public class AluTest {
       args_.add(new IndirectDirOperand<>(3, dataMemory_));
       var opcode = new Opcode(InstructId.SUB, args_);
 
-      dataMemory_.put(Alu.ACC, 4);  // ACC=4
-      dataMemory_.put(3, 2);        // R3=2
-      dataMemory_.put(2, 4);        // R2=4
-
       programMemory_.add(opcode);
-      alu_.cycle(); // ACC=4 - (R3=2 -> R2=4)
+      alu_.cycle(); // ACC=5 - (R3=6 -> R6=12)
 
-      assertTrue(dataMemory_.get(Alu.ACC) == 0);
+      assertTrue(dataMemory_.get(Alu.ACC) == -7);
     }
   }
 
@@ -246,12 +224,10 @@ public class AluTest {
       args_.add(new ConstOperand<>(3));
       var opcode = new Opcode(InstructId.MUL, args_);
 
-      dataMemory_.put(Alu.ACC, 2);  // ACC=2
-
       programMemory_.add(opcode);
-      alu_.cycle(); // ACC=2 * 3
+      alu_.cycle(); // ACC=5 * 3
 
-      assertTrue(dataMemory_.get(Alu.ACC) == 6);
+      assertTrue(dataMemory_.get(Alu.ACC) == 15);
     }
 
     public void testMulDirect() {
@@ -260,13 +236,10 @@ public class AluTest {
       args_.add(new DirectDirOperand<>(3, dataMemory_));
       var opcode = new Opcode(InstructId.MUL, args_);
 
-      dataMemory_.put(Alu.ACC, 2);  // ACC=2
-      dataMemory_.put(3, 5);        // R3=5
-
       programMemory_.add(opcode);
-      alu_.cycle(); // ACC=2 * R3=5
+      alu_.cycle(); // ACC=3 * R3=6
 
-      assertTrue(dataMemory_.get(Alu.ACC) == 10);
+      assertTrue(dataMemory_.get(Alu.ACC) == 18);
     }
 
     public void testMulIndirect() {
@@ -275,14 +248,10 @@ public class AluTest {
       args_.add(new IndirectDirOperand<>(3, dataMemory_));
       var opcode = new Opcode(InstructId.MUL, args_);
 
-      dataMemory_.put(Alu.ACC, 2);  // ACC=2
-      dataMemory_.put(3, 5);        // R3=5
-      dataMemory_.put(5, 8);        // R5=8
-
       programMemory_.add(opcode);
-      alu_.cycle(); // ACC=2 * (R3=5 -> R5=8)
+      alu_.cycle(); // ACC=5 * (R3=6 -> R6=12)
 
-      assertTrue(dataMemory_.get(Alu.ACC) == 16);
+      assertTrue(dataMemory_.get(Alu.ACC) == 70);
     }
   }
 }

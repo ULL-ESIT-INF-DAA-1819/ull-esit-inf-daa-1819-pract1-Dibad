@@ -18,6 +18,10 @@ public class Memory<T> {
     data_.put(index, value);
   }
 
+  public void clear() {
+    data_.clear();
+  }
+
   public String toString() {
     return data_.toString();
   }
