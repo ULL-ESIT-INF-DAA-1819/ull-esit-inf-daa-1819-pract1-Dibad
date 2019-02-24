@@ -95,7 +95,7 @@ public class Ramsim {
                                                        memory_.dataMemory_));
                 }
 
-              // If can't be saved as an int is a label (string)
+                // If can't be saved as an int is a label (string)
               } catch (NumberFormatException e) {
                 op.add(new ConstOperand<String>(arg));
               }

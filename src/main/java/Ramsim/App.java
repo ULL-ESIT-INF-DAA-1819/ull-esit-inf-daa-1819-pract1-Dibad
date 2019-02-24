@@ -11,8 +11,8 @@ public class App {
   }
 
   public static void main(String[] args) {
-    Ramsim rms = new Ramsim("tests_ram/test2.ram",
-        "input.txt", "output.txt");
+    Ramsim rms = new Ramsim("tests_ram/test7.ram",
+                            "input.txt", "output.txt");
     rms.execute();
   }
 }

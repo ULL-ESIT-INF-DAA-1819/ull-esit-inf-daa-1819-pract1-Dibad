@@ -4,7 +4,6 @@ import java.util.NoSuchElementException;
 
 import Ramsim.Memory.MemoryManager;
 import Ramsim.Instruction.Opcode;
-import Ramsim.Instruction.Operand.*;
 import Ramsim.Io.InputUnit;
 import Ramsim.Io.OutputUnit;
 
@@ -113,7 +112,7 @@ public class Alu {
   }
 
   private void store() {
-    memory_.putInRegister((int)opcode_.getArgument(0).getIndex(), memory_.getAcc());
+    memory_.putInRegister(opcode_.getArgument(0).getIndex(), memory_.getAcc());
   }
 
   private void add() {

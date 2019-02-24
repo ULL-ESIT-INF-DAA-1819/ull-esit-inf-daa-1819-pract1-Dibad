@@ -18,4 +18,6 @@ build
 #Java
 *.class
 
-
+input.txt
+output.txt
+test.txt

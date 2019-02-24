@@ -2,9 +2,9 @@
 # Debe producir un error en la ejecución
 
 	LOAD =3
-	STORE 1	
+	STORE 1
 	ADD =2
-	STORE =2
+	STORE =3
 	WRITE 1
 	WRITE 2
 	HALT
