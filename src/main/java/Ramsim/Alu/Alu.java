@@ -151,7 +151,7 @@ public class Alu {
   }
 
   private void div() {
-    dataMemory_.put(ACC, (int)opcode_.getValue() / dataMemory_.get(ACC));
+    dataMemory_.put(ACC, dataMemory_.get(ACC) / (int)opcode_.getValue());
   }
 
   private void read() {

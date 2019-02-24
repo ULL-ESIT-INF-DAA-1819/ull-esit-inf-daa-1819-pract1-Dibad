@@ -32,8 +32,8 @@ public class AluTest {
     dataMemory_ = new Memory<Integer>();
     programMemory_ = new ArrayList<Opcode>();
     tags_ = new HashMap<String, Integer>();
-    input_ = new InputUnit("input.txt");
-    output_ = new OutputUnit("output.txt");
+    input_ = new InputUnit("src/test/java/Ramsim/testinput.txt");
+    output_ = new OutputUnit("src/test/java/Ramsim/testoutput.txt");
     alu_ = new Alu(dataMemory_, programMemory_, tags_, input_, output_, false);
 
     args_ = new ArrayList<Operand<?>>();
@@ -218,6 +218,7 @@ public class AluTest {
   @Nested
   @DisplayName("MUL")
   class Mul {
+    @Test
     public void testMulConstant() {
       // Mul =3: Multiply the constant 3 with the ACC and store the result in
       // the ACC
@@ -230,6 +231,7 @@ public class AluTest {
       assertTrue(dataMemory_.get(Alu.ACC) == 15);
     }
 
+    @Test
     public void testMulDirect() {
       // Mul 3: Multiply the content of R3 with the ACC and store the result in
       // the ACC
@@ -237,11 +239,12 @@ public class AluTest {
       var opcode = new Opcode(InstructId.MUL, args_);
 
       programMemory_.add(opcode);
-      alu_.cycle(); // ACC=3 * R3=6
+      alu_.cycle(); // ACC=5 * R3=6
 
-      assertTrue(dataMemory_.get(Alu.ACC) == 18);
+      assertTrue(dataMemory_.get(Alu.ACC) == 30);
     }
 
+    @Test
     public void testMulIndirect() {
       // Mul*3: Multiply the content of the Register pointed by R3 with the ACC
       // and store the result in the ACc
@@ -251,13 +254,14 @@ public class AluTest {
       programMemory_.add(opcode);
       alu_.cycle(); // ACC=5 * (R3=6 -> R6=12)
 
-      assertTrue(dataMemory_.get(Alu.ACC) == 70);
+      assertTrue(dataMemory_.get(Alu.ACC) == 60);
     }
   }
 
   @Nested
   @DisplayName("DIV")
   class Div {
+    @Test
     public void testDivConstant() {
       // Div =1: Divide the constant 1 by the ACC and store the result in the
       // ACC
@@ -270,6 +274,7 @@ public class AluTest {
       assertTrue(dataMemory_.get(Alu.ACC) == 5);
     }
 
+    @Test
     public void testDivDirect() {
       // Div 1: Divide the content of R1 by the ACC and store the result in the
       // ACC
@@ -282,6 +287,7 @@ public class AluTest {
       assertTrue(dataMemory_.get(Alu.ACC) == 2);
     }
 
+    @Test
     public void testDivIndirect() {
       // Div *1: Divide the content of the Register pointed by R1 by the ACC and
       // store the result in the ACC
@@ -291,7 +297,50 @@ public class AluTest {
       programMemory_.add(opcode);
       alu_.cycle(); // ACC=5 / (R1=2 -> R2=4)
 
-      assertTrue(dataMemory_.get(Alu.ACC) == 0);
+      assertTrue(dataMemory_.get(Alu.ACC) == 1);
+    }
+  }
+
+  @Nested
+  @DisplayName("READ")
+  class Read {
+    @Test
+    public void testReadConstant() {
+      // Read =2: Read a value from the input tape and store it in the
+      // constant [MUST FAIL]
+      args_.add(new ConstOperand<>(2));
+      var opcode = new Opcode(InstructId.READ, args_);
+
+      programMemory_.add(opcode);
+      assertThrows(IllegalArgumentException.class, () -> {
+        alu_.cycle();
+      });
+    }
+
+    @Test
+    public void testReadDirect() {
+      // Read 2: Read a value from the input tape and store it in the Register
+      // R2
+      args_.add(new DirectDirOperand<>(2, dataMemory_));
+      var opcode = new Opcode(InstructId.READ, args_);
+
+      programMemory_.add(opcode);
+      alu_.cycle(); // R2=READ=1
+
+      assertTrue(dataMemory_.get(2) == 1);
+    }
+
+    @Test
+    public void testReadIndirect()  {
+      // Read *2: Read a value from the input tape and store it in the Register
+      // pointed by R2
+      args_.add(new IndirectDirOperand<>(2, dataMemory_));
+      var opcode = new Opcode(InstructId.READ, args_);
+
+      programMemory_.add(opcode);
+      alu_.cycle(); // (R2=4 -> R4)=READ=1
+
+      assertTrue(dataMemory_.get(4) == 1);
     }
   }
 }
