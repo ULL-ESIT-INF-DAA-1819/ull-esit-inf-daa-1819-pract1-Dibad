@@ -127,10 +127,61 @@ public class AluTest {
       dataMemory_.put(Alu.ACC, 3); // R0=5
       dataMemory_.put(1, 4);       // R1=4
 
-      programMemory_.add(0, opcode);
+      programMemory_.add(opcode);
       alu_.cycle();
 
       assertTrue(dataMemory_.get(4) == dataMemory_.get(Alu.ACC));
+    }
+  }
+
+  @Nested
+  @DisplayName("ADD")
+  class Add {
+    @Test
+    public void testAddConstant() {
+      // Add =2: Suma 2 al valor del ACC y almacena el resultado en el ACC
+      args_.add(new ConstOperand<>(2));
+      var opcode = new Opcode(InstructId.ADD, args_);
+
+      dataMemory_.put(Alu.ACC, 3); //ACC=3
+
+      programMemory_.add(opcode);
+      alu_.cycle(); // ACC=3 + 2
+
+      assertTrue(dataMemory_.get(Alu.ACC) == 5);
+    }
+
+    @Test
+    public void testAddDirect() {
+      // Add 2: Suma el valor del Registro R2 al ACC y almacena el resultado en
+      // el ACC
+      args_.add(new DirectDirOperand<>(2, dataMemory_));
+      var opcode = new Opcode(InstructId.ADD, args_);
+
+      dataMemory_.put(Alu.ACC, 3);  // ACC=3
+      dataMemory_.put(2, 3);        // R2=3
+
+      programMemory_.add(opcode);
+      alu_.cycle(); // ACC=3 + R2=3
+
+      assertTrue(dataMemory_.get(Alu.ACC) == 6);
+    }
+
+    @Test
+    public void testAddIndirect() {
+      // Add *2: Suma el valor del Registro apuntado por R2 al ACC y almacena el
+      // resultado en el ACC
+      args_.add(new IndirectDirOperand<>(2, dataMemory_));
+      var opcode = new Opcode(InstructId.ADD, args_);
+
+      dataMemory_.put(Alu.ACC, 3);  // ACC=3
+      dataMemory_.put(2, 4);        // R2=4
+      dataMemory_.put(4, 7);        // R4=7
+
+      programMemory_.add(opcode);
+      alu_.cycle(); // ACC=3 + (R2=4 -> R4=7)
+
+      assertTrue(dataMemory_.get(Alu.ACC) == 10);
     }
   }
 }
