@@ -342,6 +342,36 @@ public class AluTest {
 
       assertTrue(dataMemory_.get(4) == 1);
     }
+
+    @Test
+    public void testReadToAccDirect() {
+      // Read 0: Read a value from the input tape and store it in the ACC
+      // [MUST FAIL]
+      args_.add(new DirectDirOperand<>(0, dataMemory_));
+      var opcode = new Opcode(InstructId.READ, args_);
+
+      programMemory_.add(opcode);
+
+      assertThrows(IllegalArgumentException.class, () -> {
+        alu_.cycle();
+      });
+    }
+
+    @Test
+    public void testReadToAccIndirect() {
+      // Read *1: Read a value from the input tape and store it in the Register
+      // pointed by R1 (which will be the ACC)
+      args_.add(new IndirectDirOperand<>(1, dataMemory_));
+      var opcode = new Opcode(InstructId.READ, args_);
+
+      dataMemory_.put(1, 0);
+
+      programMemory_.add(opcode);
+
+      assertThrows(IllegalArgumentException.class, () -> {
+        alu_.cycle();
+      });
+    }
   }
 
   @Nested
@@ -382,6 +412,33 @@ public class AluTest {
       alu_.cycle(); // WRITE=(R2=4 -> R4)=8
 
       assertTrue(output_.peek() == 8);
+    }
+
+    @Test
+    public void testWriteFromAccDirect() {
+      // Write 0: Write the content of the ACC to the output tape [MUST FAIL]
+      args_.add(new DirectDirOperand<>(0, dataMemory_));
+      var opcode = new Opcode(InstructId.WRITE, args_);
+
+      programMemory_.add(opcode);
+      assertThrows(IllegalArgumentException.class, () -> {
+        alu_.cycle();
+      });
+    }
+
+    @Test
+    public void testWriteFromAccIndirect() {
+      // Write *1: Write the content of the Register pointed by R1 (which will
+      // be the ACC) to the output tape [MUST FAIL]
+      args_.add(new IndirectDirOperand<>(1, dataMemory_));
+      var opcode = new Opcode(InstructId.WRITE, args_);
+
+      dataMemory_.put(1, 0);
+
+      programMemory_.add(opcode);
+      assertThrows(IllegalArgumentException.class, () -> {
+        alu_.cycle();
+      });
     }
   }
 

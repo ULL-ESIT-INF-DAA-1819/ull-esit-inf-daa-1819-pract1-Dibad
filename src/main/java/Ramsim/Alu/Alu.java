@@ -161,10 +161,24 @@ public class Alu {
   }
 
   private void read() {
+    int index = opcode_.getRegisterIndex();
+    if (index == Alu.ACC)
+      throw new IllegalArgumentException(
+        "READ Instruction can't be used with the ACC register!");
+
     dataMemory_.put(opcode_.getRegisterIndex(), input_.read());
   }
 
   private void write() {
+    int index = Alu.ACC + 1; // Never the same value as ACC
+    try { // Workaround for silently catch exception when WRITE 0
+      index = opcode_.getRegisterIndex();
+    } catch (IllegalArgumentException e) {}
+
+    if (index == Alu.ACC)
+      throw new IllegalArgumentException(
+        "WRITE Instruction can't be used with the ACC register!");
+
     output_.write((int)opcode_.getValue());
   }
 
