@@ -52,12 +52,13 @@ public class Ramsim {
         alu_.cycle();
 
       } catch (RuntimeException e) {
-        System.out.println("RAMSIM::ERROR::An exception has occurred:\n" + e);
+        System.out.println("RAMSIM::ERROR::An exception has occurred:");
         if (debug_)
           e.printStackTrace();
+        else
+          System.out.println(e);
 
         alu_.halt();
-
         throw e;
       }
     }
@@ -124,9 +125,11 @@ public class Ramsim {
         }
       }
 
-      System.out.println(String.format("Program loaded!\n%d instructions:\n%s",
-                                       programMemory_.size(), programMemory_));
-      System.out.println("Tags:\n" + tags_ + "\n");
+      if(debug_) {
+        System.out.println(String.format("Program loaded!\n%d instructions:\n%s",
+                                        programMemory_.size(), programMemory_));
+        System.out.println("Tags:\n" + tags_ + "\n");
+      }
 
     } catch (IOException e) { // Handle exceptions better
       e.printStackTrace();

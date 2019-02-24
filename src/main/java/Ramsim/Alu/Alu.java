@@ -21,6 +21,7 @@ public class Alu {
   // Alu attributes
   private Opcode opcode_;
   private int ip_ = 0; // Instruction pointer
+  private int executedInstructions_ = 0;
 
   // Aliases
   public static final int ACC = 0; // ACC == Index 0 (R0)
@@ -57,6 +58,8 @@ public class Alu {
     try {
       opcode_ = programMemory_.get(ip_);
       ++ip_;
+      ++executedInstructions_;
+
     } catch (IndexOutOfBoundsException e) {
       throw new IndexOutOfBoundsException("Tried to fetch instruction " + ip_
                                           + ", which isn't loaded in memory!");
@@ -68,6 +71,7 @@ public class Alu {
   }
 
   public void printDebugState() {
+    System.out.println(String.format("Instruction %d", executedInstructions_));
     System.out.println(String.format("IP: %d", ip_ - 1));
     System.out.println("Opcode: " + opcode_);
     System.out.println("Data memory:\n" + dataMemory_);
@@ -203,6 +207,8 @@ public class Alu {
 
   public void halt() {
     output_.storeTapeToFile();
+    System.out.println(String.format("FINISHED: %d instructions executed",
+                                     executedInstructions_));
     halt_ = true;
   }
 }

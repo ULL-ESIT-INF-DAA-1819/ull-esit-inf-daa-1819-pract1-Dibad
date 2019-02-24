@@ -6,12 +6,8 @@ package Ramsim;
 import Ramsim.Ramsim;
 
 public class App {
-  public String getGreeting() {
-    return "Hello world.";
-  }
-
   public static void main(String[] args) {
-    Ramsim rms = new Ramsim("tests_ram/test6.ram",
+    Ramsim rms = new Ramsim("tests_ram/test2.ram",
                             "input.txt", "output.txt", true);
     rms.execute();
   }
