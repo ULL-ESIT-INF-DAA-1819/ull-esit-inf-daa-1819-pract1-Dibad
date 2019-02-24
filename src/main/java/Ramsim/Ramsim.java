@@ -53,6 +53,7 @@ public class Ramsim {
       while (fileReader.hasNextLine()) {
         String line = fileReader.nextLine();
 
+        System.out.println(line);
         line = line.replaceAll("#[^\n]*", ""); // Remove # comments
 
         if (!line.isEmpty()) {
@@ -107,6 +108,7 @@ public class Ramsim {
         }
       }
 
+      System.out.println(lineNumber);
       System.out.println("Program loaded!\n" + memory_.programMemory_.toString());
       System.out.println("Tags:\n" + memory_.tags_);
 

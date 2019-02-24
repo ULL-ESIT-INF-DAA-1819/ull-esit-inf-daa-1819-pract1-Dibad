@@ -1,10 +1,9 @@
-# Programa que reconoce el lenguaje formado por las 
-# palabras que tienen el mismo número de 1 y 2.
-# Las palabras finalizan con el número 0. 
-# Los únicos símbolos posibles de entrada son 0, 1 y 2.
-# La cinta de salida contendrá un 1 si se reconoce la palabra
+# Programa que reconoce el lenguaje formado por las
+# palabras que tienen el mismo nÃºmero de 1 y 2.
+# Las palabras finalizan con el nÃºmero 0.
+# Los Ãºnicos sÃ­mbolos posibles de entrada son 0, 1 y 2.
+# La cinta de salida contendrÃ¡ un 1 si se reconoce la palabra
 # y un 0 si no pertenece al lenguaje
-
 					LOAD =0
 					STORE 2
 					READ 1
@@ -28,3 +27,4 @@ end_wh:		LOAD 2
 					JUMP fin
 iguales:	WRITE =1
 fin:			HALT
+

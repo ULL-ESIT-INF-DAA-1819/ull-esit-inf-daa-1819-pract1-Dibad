@@ -113,7 +113,7 @@ public class Alu {
   }
 
   private void store() {
-    memory_.putInRegister((int)opcode_.getValue(), memory_.getAcc());
+    memory_.putInRegister((int)opcode_.getArgument(0).getIndex(), memory_.getAcc());
   }
 
   private void add() {
