@@ -17,7 +17,8 @@ public class Alu {
   private Opcode opcode_;
   private int ip_ = 0; // Instruction pointer
 
-  boolean debug = true;
+  boolean debug_ = true;
+  boolean halt_ = false;
 
   public Alu(MemoryManager memory,
              InputUnit input,
@@ -30,13 +31,17 @@ public class Alu {
   public void cycle() {
     fetch();
     execute();
-    if (debug)
+    if (debug_)
       printDebugState();
   }
 
   public void fetch() {
     opcode_ = memory_.getInstruction(ip_);
     ++ip_;
+  }
+
+  public boolean isHalted() {
+    return halt_;
   }
 
   public void printDebugState() {
@@ -154,8 +159,8 @@ public class Alu {
       ip_ = memory_.getTag((String)opcode_.getValue());
   }
 
-  private void halt() {
+  public void halt() {
     output_.storeTapeToFile();
-    throw new RuntimeException("Program was requested to finish");
+    halt_ = true;
   }
 }

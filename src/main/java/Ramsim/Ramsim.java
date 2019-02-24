@@ -21,9 +21,6 @@ public class Ramsim {
   private OutputUnit output_;
   private Alu alu_;
 
-  // Attributes
-  private boolean quit_ = false;
-
   public Ramsim(String programFilePath, String inputFilePath, String outputFilePath) {
     memory_ = new MemoryManager();
     input_ = new InputUnit(inputFilePath);
@@ -34,16 +31,17 @@ public class Ramsim {
   }
 
   public void execute() {
-    while (!quit_) {
+    while (!alu_.isHalted()) {
       try {
         alu_.cycle();
 
       } catch (RuntimeException e) { // Handle exceptions better
-        System.out.println(e);
         e.printStackTrace();
-        quit_ = true;
+        alu_.halt();
       }
     }
+
+    System.out.println("Output:\n" + output_);
   }
 
   private void loadProgram(String programFilePath) {
