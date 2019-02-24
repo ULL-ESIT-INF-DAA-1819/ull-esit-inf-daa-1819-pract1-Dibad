@@ -71,13 +71,15 @@ public class Alu {
   }
 
   public void printDebugState() {
-    System.out.println(String.format("Instruction %d", executedInstructions_));
-    System.out.println(String.format("IP: %d", ip_ - 1));
-    System.out.println("Opcode: " + opcode_);
-    System.out.println("Data memory:\n" + dataMemory_);
-    System.out.println("Input tape:\n" + input_);
-    System.out.println("Output tape:\n" + output_);
-    System.out.println();
+    System.out.println(String.format("\t<< %s >>", opcode_));
+    System.out.print(" Line in code: " + opcode_.getLineNum());
+    System.out.println(" \tTotal exec. instructions: " + executedInstructions_);
+    System.out.println(" \n\t|| Registers ||");
+    System.out.println(" IP: " + (ip_ - 1));
+    System.out.println(" Data:\n  " + dataMemory_);
+    System.out.println(" Input tape:\n  " + input_);
+    System.out.println(" Output tape:\n  " + output_);
+    System.out.println("\n");
   }
 
   public void execute() {
@@ -133,8 +135,7 @@ public class Alu {
 
     default:
       throw new NoSuchElementException
-      ("Cannot find an instruction associated with opcode" +
-       opcode_.getId() + "!");
+      ("Cannot find instruction with opcode " + opcode_.getId());
     }
   }
 

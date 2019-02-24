@@ -7,8 +7,21 @@ import Ramsim.Ramsim;
 
 public class App {
   public static void main(String[] args) {
-    Ramsim rms = new Ramsim("tests_ram/test2.ram",
-                            "input.txt", "output.txt", true);
-    rms.execute();
+    if (args.length != 4) {
+      System.out.println(
+        "Use: Ramsim ram_program.ram input_tape.in output_tape.out debug[0|1]");
+      return;
+    }
+
+    String ramProgram = args[0];
+    String inputTape = args[1];
+    String outputTape = args[2];
+    boolean debug = args[3].equals("1");
+
+    Ramsim rms = new Ramsim(ramProgram, inputTape, outputTape, debug);
+
+    try {
+      rms.execute();
+    } catch (Exception e) {} // Workaround for avoid showing exception twice
   }
 }

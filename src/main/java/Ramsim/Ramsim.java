@@ -58,6 +58,9 @@ public class Ramsim {
         else
           System.out.println(e);
 
+        System.out.println("\n   ALU STATE INFORMATION:");
+        alu_.printDebugState();
+
         alu_.halt();
         throw e;
       }
@@ -69,7 +72,9 @@ public class Ramsim {
   private void loadProgram(String programFilePath) {
     try(Scanner fileReader = new Scanner(new File(programFilePath))) {
 
+      int lineNum = 0;
       while (fileReader.hasNextLine()) {
+        ++lineNum;
         String line = fileReader.nextLine();
 
         line = line.replaceAll("#[^\n]*", ""); // Remove # comments
@@ -102,12 +107,14 @@ public class Ramsim {
                   arg = arg.substring(1); // Remove first character
                   operand.add(new ConstOperand<>(Integer.parseInt(arg)));
 
+                  // INDIRECT
                 } else if (firstChar == '*') {
                   arg = arg.substring(1); // Remove first character
                   operand.add(new IndirectDirOperand<>(Integer.parseInt(arg),
                                                        dataMemory_));
                 }
 
+                // DIRECT
                 else {
                   operand.add(new DirectDirOperand<>(Integer.parseInt(arg),
                                                      dataMemory_));
@@ -121,13 +128,13 @@ public class Ramsim {
           }
 
           // Save instruction in program memory
-          programMemory_.add(new Opcode(id, operand));
+          programMemory_.add(new Opcode(id, operand, lineNum));
         }
       }
 
-      if(debug_) {
+      if (debug_) {
         System.out.println(String.format("Program loaded!\n%d instructions:\n%s",
-                                        programMemory_.size(), programMemory_));
+                                         programMemory_.size(), programMemory_));
         System.out.println("Tags:\n" + tags_ + "\n");
       }
 

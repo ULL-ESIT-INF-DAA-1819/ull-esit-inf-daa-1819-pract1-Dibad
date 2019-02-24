@@ -20,5 +20,9 @@ test {
         showStandardStreams = true
     }
 }
+
+run {
+  args = ["tests_ram/test1.ram", "input.txt", "output.txt", "0"]
+}
 // Define the main class for the application
 mainClassName = 'Ramsim.App'

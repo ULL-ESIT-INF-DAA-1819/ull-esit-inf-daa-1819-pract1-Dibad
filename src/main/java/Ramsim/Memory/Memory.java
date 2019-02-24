@@ -23,6 +23,10 @@ public class Memory<T> {
   }
 
   public String toString() {
-    return data_.toString();
+    String output = "";
+    for (var k : data_.entrySet()) {
+      output = output.concat(String.format("[R%d]=%d, ", k.getKey(), k.getValue()));
+    }
+    return output;
   }
 }
