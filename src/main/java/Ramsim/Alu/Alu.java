@@ -46,7 +46,7 @@ public class Alu {
     debug_ = debug;
   }
 
-  public void cycle() {
+  public void cycle() throws IndexOutOfBoundsException {
     fetch();
     execute();
     if (debug_)
@@ -54,8 +54,13 @@ public class Alu {
   }
 
   public void fetch() {
-    opcode_ = programMemory_.get(ip_);
-    ++ip_;
+    try {
+      opcode_ = programMemory_.get(ip_);
+      ++ip_;
+    } catch (IndexOutOfBoundsException e) {
+      throw new IndexOutOfBoundsException("Tried to fetch instruction " + ip_
+                                          + ", which isn't loaded in memory!");
+    }
   }
 
   public boolean isHalted() {

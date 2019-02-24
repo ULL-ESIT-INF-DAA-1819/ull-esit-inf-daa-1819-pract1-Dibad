@@ -428,4 +428,61 @@ public class AluTest {
       });
     }
   }
+
+  @Nested
+  @DisplayName("JZERO")
+  class Jzero {
+    @BeforeEach
+    public void setAccToZero() {
+      dataMemory_.put(Alu.ACC, 0);
+    }
+
+    @Test
+    public void testJzeroConstant() {
+      // JZERO start: Jump to the instruction pointed by the tag if the ACC
+      // value is 0
+      args_.add(new ConstOperand<>("start"));
+      var opcode = new Opcode(InstructId.JZERO, args_);
+
+      tags_.put("start", 0); // start=0
+
+      programMemory_.add(opcode);
+      assertAll(() -> {
+        alu_.cycle(); // ACC=0 -> Jumps to start=0
+        alu_.cycle(); // ACC=0 -> Jumps to start=0
+        alu_.cycle(); // ACC=0 -> Jumps to start=0
+      });
+
+      dataMemory_.put(Alu.ACC, 5);  // ACC=5
+
+      assertThrows(IndexOutOfBoundsException.class, () -> {
+        alu_.cycle(); // ACC=5 -> Don't jump
+        alu_.cycle(); // No more instructions, throw OutOfBounds
+      });
+    }
+
+    @Test
+    public void testJzeroDirect() {
+      // JZERO 1: Jzero only works with tags, MUST FAIL
+      args_.add(new DirectDirOperand<>(1, dataMemory_));
+      var opcode = new Opcode(InstructId.JZERO, args_);
+
+      programMemory_.add(opcode);
+      assertThrows(IllegalArgumentException.class, () -> {
+        alu_.cycle();
+      });
+    }
+
+    @Test
+    public void testJzeroIndirect() {
+      // JZERO *1: Jzero only works with tags, MUST FAIL
+      args_.add(new IndirectDirOperand<>(1, dataMemory_));
+      var opcode = new Opcode(InstructId.JZERO, args_);
+
+      programMemory_.add(opcode);
+      assertThrows(IllegalArgumentException.class, () -> {
+        alu_.cycle();
+      });
+    }
+  }
 }

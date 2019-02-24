@@ -48,7 +48,7 @@ public class Ramsim {
         alu_.cycle();
 
       } catch (RuntimeException e) {
-        System.out.println("An exception has occurred:");
+        System.out.println(" -> An exception has occurred:");
         e.printStackTrace();
         alu_.halt();
       }
