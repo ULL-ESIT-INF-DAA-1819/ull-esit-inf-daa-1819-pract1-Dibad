@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import Ramsim.Memory.Memory;
 import Ramsim.Instruction.Opcode;
+import Ramsim.Instruction.Operand.*;
 import Ramsim.Io.InputUnit;
 import Ramsim.Io.OutputUnit;
 
@@ -20,21 +21,28 @@ public class Alu {
   private Opcode opcode_;
   private int ip_ = 0; // Instruction pointer
 
-  private static final int ACC = 0;
+  // Aliases
+  public static final int ACC = 0; // ACC == Index 0 (R0)
 
-  boolean debug_ = true;
-  boolean halt_ = false;
+  // Flags
+  boolean debug_;
+  boolean halt_;
 
+
+  // Constructor
   public Alu(Memory<Integer> dataMemory,
              Memory<Opcode> programMemory,
              HashMap<String, Integer> tags,
              InputUnit input,
-             OutputUnit output) {
+             OutputUnit output,
+             boolean debug) {
+
     dataMemory_ = dataMemory;
     programMemory_ = programMemory;
     tags_ = tags;
     input_ = input;
     output_ = output;
+    debug_ = debug;
   }
 
   public void cycle() {
@@ -120,13 +128,14 @@ public class Alu {
     }
   }
 
+
   // RAM Simulator Instruction Set
   private void load() {
     dataMemory_.put(ACC, (int)opcode_.getValue());
   }
 
   private void store() {
-    dataMemory_.put(opcode_.getArgument(0).getIndex(), dataMemory_.get(ACC));
+    dataMemory_.put(opcode_.getRegisterIndex(), dataMemory_.get(ACC));
   }
 
   private void add() {
@@ -146,7 +155,7 @@ public class Alu {
   }
 
   private void read() {
-    dataMemory_.put(opcode_.getArgument(0).getIndex(), input_.read());
+    dataMemory_.put(opcode_.getRegisterIndex(), input_.read());
   }
 
   private void write() {

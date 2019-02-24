@@ -13,7 +13,7 @@ public class DirectDirOperand<T> extends Operand<T> {
   }
 
   @Override
-  public int getIndex() {
+  public int getRegisterIndex() {
     return index_;
   }
 

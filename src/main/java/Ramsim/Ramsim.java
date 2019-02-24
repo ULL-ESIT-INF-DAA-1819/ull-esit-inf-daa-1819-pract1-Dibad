@@ -27,13 +27,17 @@ public class Ramsim {
 
   // Constructor
 
-  public Ramsim(String programFilePath, String inputFilePath, String outputFilePath) {
+  public Ramsim(String programFilePath,
+                String inputFilePath,
+                String outputFilePath,
+                boolean debug) {
+
     dataMemory_ = new Memory<Integer>();
     programMemory_ = new Memory<Opcode>();
     tags_ = new HashMap<String, Integer>();
     input_ = new InputUnit(inputFilePath);
     output_ = new OutputUnit(outputFilePath);
-    alu_ = new Alu(dataMemory_, programMemory_, tags_, input_, output_);
+    alu_ = new Alu(dataMemory_, programMemory_, tags_, input_, output_, debug);
 
     loadProgram(programFilePath);
   }

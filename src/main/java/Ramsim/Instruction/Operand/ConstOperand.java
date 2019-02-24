@@ -8,8 +8,8 @@ public class ConstOperand<T> extends Operand<T> {
   }
 
   @Override
-  public int getIndex() {
-    return (int)constValue_;
+  public int getRegisterIndex() {
+    throw new IllegalArgumentException("Illegal operation!");
   }
 
   @Override

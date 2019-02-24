@@ -17,12 +17,12 @@ public class Opcode {
     return id_;
   }
 
-  public Object getValue() { // Alias
+  public Object getValue() { // Alias for 1st argument
     return argument_.get(0).getValue();
   }
 
-  public Operand<?> getArgument(int index)  {
-    return argument_.get(index);
+  public int getRegisterIndex() { // Alias for 1st argument
+    return argument_.get(0).getRegisterIndex();
   }
 
   public String toString() {

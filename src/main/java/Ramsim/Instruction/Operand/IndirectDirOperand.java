@@ -12,8 +12,8 @@ public class IndirectDirOperand<T> extends Operand<T> {
   }
 
   @Override
-  public int getIndex()  {
-    return index_;
+  public int getRegisterIndex() {
+    return (int)memory_.get(index_);
   }
 
   @Override
