@@ -2,17 +2,17 @@ package Ramsim.Alu;
 
 import java.util.NoSuchElementException;
 import java.util.HashMap;
+import java.util.ArrayList;
 
 import Ramsim.Memory.Memory;
 import Ramsim.Instruction.Opcode;
-import Ramsim.Instruction.Operand.*;
 import Ramsim.Io.InputUnit;
 import Ramsim.Io.OutputUnit;
 
 public class Alu {
   // Component links
   private Memory<Integer> dataMemory_;
-  private Memory<Opcode> programMemory_;
+  private ArrayList<Opcode> programMemory_;
   private HashMap<String, Integer> tags_;
   private InputUnit input_;
   private OutputUnit output_;
@@ -31,7 +31,7 @@ public class Alu {
 
   // Constructor
   public Alu(Memory<Integer> dataMemory,
-             Memory<Opcode> programMemory,
+             ArrayList<Opcode> programMemory,
              HashMap<String, Integer> tags,
              InputUnit input,
              OutputUnit output,

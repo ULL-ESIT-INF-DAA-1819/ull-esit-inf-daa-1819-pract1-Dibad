@@ -18,7 +18,7 @@ import Ramsim.Instruction.InstructId;
 public class Ramsim {
   // Ram Simulator components
   private Memory<Integer> dataMemory_;
-  private Memory<Opcode> programMemory_;
+  private ArrayList<Opcode> programMemory_;
   private HashMap<String, Integer> tags_;
   private InputUnit input_;
   private OutputUnit output_;
@@ -33,7 +33,7 @@ public class Ramsim {
                 boolean debug) {
 
     dataMemory_ = new Memory<Integer>();
-    programMemory_ = new Memory<Opcode>();
+    programMemory_ = new ArrayList<Opcode>();
     tags_ = new HashMap<String, Integer>();
     input_ = new InputUnit(inputFilePath);
     output_ = new OutputUnit(outputFilePath);
@@ -60,7 +60,6 @@ public class Ramsim {
   private void loadProgram(String programFilePath) {
     try(Scanner fileReader = new Scanner(new File(programFilePath))) {
 
-      int lineNumber = 0;
       while (fileReader.hasNextLine()) {
         String line = fileReader.nextLine();
 
@@ -74,7 +73,7 @@ public class Ramsim {
 
           // Check if first element is a tag and store tag
           if (splitted.get(0).endsWith(":")) {
-            tags_.put(splitted.get(0).replace(":", ""), lineNumber);
+            tags_.put(splitted.get(0).replace(":", ""), programMemory_.size());
             splitted.remove(0);
           }
 
@@ -114,13 +113,12 @@ public class Ramsim {
           }
 
           // Save instruction in program memory
-          programMemory_.put(lineNumber, new Opcode(id, operand));
-          ++lineNumber;
+          programMemory_.add(new Opcode(id, operand));
         }
       }
 
       System.out.println(String.format("Program loaded! %d instructions: %s",
-                                       lineNumber, programMemory_));
+                                       programMemory_.size(), programMemory_));
       System.out.println("Tags:\n" + tags_ + "\n");
 
     } catch (IOException e) { // Handle exceptions better
