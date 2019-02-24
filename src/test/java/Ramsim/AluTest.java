@@ -236,4 +236,53 @@ public class AluTest {
       assertTrue(dataMemory_.get(Alu.ACC) == 0);
     }
   }
+
+  @Nested
+  @DisplayName("MUL")
+  class Mul {
+    public void testMulConstant() {
+      // Mul =3: Multiply the constant 3 with the ACC and store the result in
+      // the ACC
+      args_.add(new ConstOperand<>(3));
+      var opcode = new Opcode(InstructId.MUL, args_);
+
+      dataMemory_.put(Alu.ACC, 2);  // ACC=2
+
+      programMemory_.add(opcode);
+      alu_.cycle(); // ACC=2 * 3
+
+      assertTrue(dataMemory_.get(Alu.ACC) == 6);
+    }
+
+    public void testMulDirect() {
+      // Mul 3: Multiply the content of R3 with the ACC and store the result in
+      // the ACC
+      args_.add(new DirectDirOperand<>(3, dataMemory_));
+      var opcode = new Opcode(InstructId.MUL, args_);
+
+      dataMemory_.put(Alu.ACC, 2);  // ACC=2
+      dataMemory_.put(3, 5);        // R3=5
+
+      programMemory_.add(opcode);
+      alu_.cycle(); // ACC=2 * R3=5
+
+      assertTrue(dataMemory_.get(Alu.ACC) == 10);
+    }
+
+    public void testMulIndirect() {
+      // Mul*3: Multiply the content of the Register pointed by R3 with the ACC
+      // and store the result in the ACc
+      args_.add(new IndirectDirOperand<>(3, dataMemory_));
+      var opcode = new Opcode(InstructId.MUL, args_);
+
+      dataMemory_.put(Alu.ACC, 2);  // ACC=2
+      dataMemory_.put(3, 5);        // R3=5
+      dataMemory_.put(5, 8);        // R5=8
+
+      programMemory_.add(opcode);
+      alu_.cycle(); // ACC=2 * (R3=5 -> R5=8)
+
+      assertTrue(dataMemory_.get(Alu.ACC) == 16);
+    }
+  }
 }
