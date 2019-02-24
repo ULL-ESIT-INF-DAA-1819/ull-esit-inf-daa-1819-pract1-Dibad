@@ -4,6 +4,7 @@ import java.util.NoSuchElementException;
 
 import Ramsim.Memory.MemoryManager;
 import Ramsim.Instruction.Opcode;
+import Ramsim.Instruction.Operand.*;
 import Ramsim.Io.InputUnit;
 import Ramsim.Io.OutputUnit;
 
@@ -108,50 +109,50 @@ public class Alu {
 
   // RAM Simulator Instruction Set
   private void load() {
-    memory_.setAcc((int)opcode_.getArgument());
+    memory_.setAcc((int)opcode_.getValue());
   }
 
   private void store() {
-    memory_.putInRegister((int)opcode_.getArgument(), memory_.getAcc());
+    memory_.putInRegister((int)opcode_.getValue(), memory_.getAcc());
   }
 
   private void add() {
-    memory_.setAcc((int)opcode_.getArgument() + memory_.getAcc());
+    memory_.setAcc((int)opcode_.getValue() + memory_.getAcc());
   }
 
   private void sub() {
-    memory_.setAcc((int)opcode_.getArgument() + memory_.getAcc());
+    memory_.setAcc((int)opcode_.getValue() + memory_.getAcc());
   }
 
   private void mul() {
-    memory_.setAcc((int)opcode_.getArgument() * memory_.getAcc());
+    memory_.setAcc((int)opcode_.getValue() * memory_.getAcc());
   }
 
   private void div() {
-    memory_.setAcc((int)opcode_.getArgument() / memory_.getAcc());
+    memory_.setAcc((int)opcode_.getValue() / memory_.getAcc());
   }
 
   private void read() {
-    memory_.putInRegister((int)opcode_.getArgument(), input_.read());
+    memory_.putInRegister(opcode_.getArgument(0).getIndex(), input_.read());
   }
 
   private void write() {
-    output_.write((int)opcode_.getArgument());
+    output_.write((int)opcode_.getValue());
   }
 
   private void jump() {
-    System.out.println(memory_.getTag((String)opcode_.getArgument()));
-    ip_ = memory_.getTag((String)opcode_.getArgument());
+    System.out.println(memory_.getTag((String)opcode_.getValue()));
+    ip_ = memory_.getTag((String)opcode_.getValue());
   }
 
   private void jzero() {
     if (memory_.getAcc() == 0)
-      ip_ = memory_.getTag((String)opcode_.getArgument());
+      ip_ = memory_.getTag((String)opcode_.getValue());
   }
 
   private void jgtz() {
     if (memory_.getAcc() > 0)
-      ip_ = memory_.getTag((String)opcode_.getArgument());
+      ip_ = memory_.getTag((String)opcode_.getValue());
   }
 
   private void halt() {

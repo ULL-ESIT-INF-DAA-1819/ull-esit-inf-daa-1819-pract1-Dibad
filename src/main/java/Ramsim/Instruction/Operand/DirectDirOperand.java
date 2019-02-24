@@ -13,12 +13,17 @@ public class DirectDirOperand<T> extends Operand<T> {
   }
 
   @Override
+  public int getIndex() {
+    return index_;
+  }
+
+  @Override
   public T getValue() {
     return memory_.get(index_);
   }
 
   @Override
   public String toString() {
-    return String.format("=%d", index_);
+    return String.format("%d", index_);
   }
 }

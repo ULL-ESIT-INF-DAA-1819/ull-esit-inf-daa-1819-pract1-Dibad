@@ -17,8 +17,12 @@ public class Opcode {
     return id_;
   }
 
-  public Object getArgument() { // PROVISIONAL
+  public Object getValue() { // Alias
     return argument_.get(0).getValue();
+  }
+
+  public Operand<?> getArgument(int index)  {
+    return argument_.get(index);
   }
 
   public String toString() {

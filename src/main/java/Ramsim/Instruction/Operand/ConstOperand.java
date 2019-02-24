@@ -8,12 +8,17 @@ public class ConstOperand<T> extends Operand<T> {
   }
 
   @Override
+  public int getIndex() {
+    return (int)constValue_;
+  }
+
+  @Override
   public T getValue() {
     return constValue_;
   }
 
   @Override
   public String toString() {
-    return constValue_.toString();
+    return String.format("= %s", constValue_.toString());
   }
 }

@@ -75,25 +75,28 @@ public class Ramsim {
 
           if (!splitted.isEmpty()) {
             for (var arg : splitted) {
-              if (arg.startsWith("=")) { // DIRECT DIR
-                int index = Integer.parseInt(arg.substring(1)); // Remove =
-                op.add(new DirectDirOperand<Integer>(index, memory_.dataMemory_));
+              try {
+                char firstChar = arg.charAt(0);
 
-              } else if (arg.startsWith("*")) { // INDIRECT DIR
-                int index = Integer.parseInt(arg.substring(1)); // Remove *
-                op.add(new IndirectDirOperand<Integer>(index,
-                                                       memory_.dataMemory_));
+                // CONSTANT
+                if (firstChar == '=') {
+                  arg = arg.substring(1);
+                  op.add(new ConstOperand<Integer>(Integer.parseInt(arg)));
 
-              } else { // CONSTANT
-                try {
-                  // Try to add as Integer
-                  op.add(new
-                         ConstOperand<Integer>(Integer.parseInt(arg)));
-
-                } catch (NumberFormatException e) {
-                  // Add as string (label)
-                  op.add(new ConstOperand<String>(arg));
+                } else if (firstChar == '*') {
+                  arg = arg.substring(1);
+                  op.add(new IndirectDirOperand<Integer>(Integer.parseInt(arg),
+                                                         memory_.dataMemory_));
                 }
+
+                else {
+                  op.add(new DirectDirOperand<Integer>(Integer.parseInt(arg),
+                                                       memory_.dataMemory_));
+                }
+
+              // If can't be saved as an int is a label (string)
+              } catch (NumberFormatException e) {
+                op.add(new ConstOperand<String>(arg));
               }
             }
           }

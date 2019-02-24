@@ -12,6 +12,11 @@ public class IndirectDirOperand<T> extends Operand<T> {
   }
 
   @Override
+  public int getIndex()  {
+    return index_;
+  }
+
+  @Override
   public T getValue() {
     return memory_.get((int)memory_.get(index_));
   }
