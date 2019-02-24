@@ -485,4 +485,54 @@ public class AluTest {
       });
     }
   }
+
+  @Nested
+  @DisplayName("JGTZ")
+  class Jgtz {
+    @Test
+    public void testJgtzConstant() {
+      // Jgtz start: Jump to tag if ACC is greater than 0
+      args_.add(new ConstOperand<>("start"));
+      var opcode = new Opcode(InstructId.JGTZ, args_);
+
+      tags_.put("start", 0);
+
+      programMemory_.add(opcode);
+      assertAll(() -> {
+        alu_.cycle(); // ACC=5 > 0. Jump to start=0
+        alu_.cycle(); // ACC=5 > 0. Jump to start=0
+        alu_.cycle(); // ACC=5 > 0. Jump to start=0
+      });
+
+      dataMemory_.put(Alu.ACC, 0);
+      assertThrows(IndexOutOfBoundsException.class, () -> {
+        alu_.cycle(); // ACC=0. Don't jump
+        alu_.cycle(); // No more instructions. Throw OutOfBounds
+      });
+    }
+
+    @Test
+    public void testJzeroDirect() {
+      // JGTZ 1: Jgtz only works with tags, MUST FAIL
+      args_.add(new DirectDirOperand<>(1, dataMemory_));
+      var opcode = new Opcode(InstructId.JGTZ, args_);
+
+      programMemory_.add(opcode);
+      assertThrows(IllegalArgumentException.class, () -> {
+        alu_.cycle();
+      });
+    }
+
+    @Test
+    public void testJzeroIndirect() {
+      // JGTZ *1: Jgtz only works with tags, MUST FAIL
+      args_.add(new IndirectDirOperand<>(1, dataMemory_));
+      var opcode = new Opcode(InstructId.JGTZ, args_);
+
+      programMemory_.add(opcode);
+      assertThrows(IllegalArgumentException.class, () -> {
+        alu_.cycle();
+      });
+    }
+  }
 }
