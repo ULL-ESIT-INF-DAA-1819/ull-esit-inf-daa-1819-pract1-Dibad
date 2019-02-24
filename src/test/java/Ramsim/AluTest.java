@@ -343,4 +343,45 @@ public class AluTest {
       assertTrue(dataMemory_.get(4) == 1);
     }
   }
+
+  @Nested
+  @DisplayName("WRITE")
+  class Write {
+    @Test
+    public void testWriteConstant() {
+      // Write =2: Write the constant 1 to the output tape
+      args_.add(new ConstOperand<>(2));
+      var opcode = new Opcode(InstructId.WRITE, args_);
+
+      programMemory_.add(opcode);
+      alu_.cycle(); // WRITE=2
+
+      assertTrue(output_.peek() == 2);
+    }
+
+    @Test
+    public void testWriteDirect() {
+      // Write 2: Write the content of R2 to the output tape
+      args_.add(new DirectDirOperand<>(2, dataMemory_));
+      var opcode = new Opcode(InstructId.WRITE, args_);
+
+      programMemory_.add(opcode);
+      alu_.cycle(); // WRITE=R2=4
+
+      assertTrue(output_.peek() == 4);
+    }
+
+    @Test
+    public void testWriteIndirect() {
+      // Write *2: Write the content of the Register pointed by R2 to the output
+      // tape
+      args_.add(new IndirectDirOperand<>(2, dataMemory_));
+      var opcode = new Opcode(InstructId.WRITE, args_);
+
+      programMemory_.add(opcode);
+      alu_.cycle(); // WRITE=(R2=4 -> R4)=8
+
+      assertTrue(output_.peek() == 8);
+    }
+  }
 }

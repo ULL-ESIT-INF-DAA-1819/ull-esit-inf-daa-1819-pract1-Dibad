@@ -26,4 +26,9 @@ public class InputUnit extends Unit {
   public int read() throws IndexOutOfBoundsException {
     return tape_.get(readingHead_++);
   }
+
+  @Override
+  public int peek() {
+    return tape_.get(readingHead_);
+  }
 }

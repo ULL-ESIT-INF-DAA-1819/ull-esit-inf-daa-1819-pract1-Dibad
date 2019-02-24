@@ -22,4 +22,9 @@ public class OutputUnit extends Unit {
   public void write(int value) {
     tape_.add(value);
   }
+
+  @Override
+  public int peek() {
+    return tape_.get(tape_.size() - 1);
+  }
 }
