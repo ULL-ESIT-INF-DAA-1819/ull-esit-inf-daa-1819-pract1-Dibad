@@ -1,15 +1,18 @@
 package Ramsim.Alu;
 
 import java.util.NoSuchElementException;
+import java.util.HashMap;
 
-import Ramsim.Memory.MemoryManager;
+import Ramsim.Memory.Memory;
 import Ramsim.Instruction.Opcode;
 import Ramsim.Io.InputUnit;
 import Ramsim.Io.OutputUnit;
 
 public class Alu {
   // Component links
-  private MemoryManager memory_;
+  private Memory<Integer> dataMemory_;
+  private Memory<Opcode> programMemory_;
+  private HashMap<String, Integer> tags_;
   private InputUnit input_;
   private OutputUnit output_;
 
@@ -17,13 +20,19 @@ public class Alu {
   private Opcode opcode_;
   private int ip_ = 0; // Instruction pointer
 
+  private static final int ACC = 0;
+
   boolean debug_ = true;
   boolean halt_ = false;
 
-  public Alu(MemoryManager memory,
+  public Alu(Memory<Integer> dataMemory,
+             Memory<Opcode> programMemory,
+             HashMap<String, Integer> tags,
              InputUnit input,
              OutputUnit output) {
-    memory_ = memory;
+    dataMemory_ = dataMemory;
+    programMemory_ = programMemory;
+    tags_ = tags;
     input_ = input;
     output_ = output;
   }
@@ -36,7 +45,7 @@ public class Alu {
   }
 
   public void fetch() {
-    opcode_ = memory_.getInstruction(ip_);
+    opcode_ = programMemory_.get(ip_);
     ++ip_;
   }
 
@@ -47,7 +56,7 @@ public class Alu {
   public void printDebugState() {
     System.out.println(String.format("IP: %d", ip_ - 1));
     System.out.println("Opcode: " + opcode_);
-    System.out.println("Data memory:\n" + memory_.dataMemory_);
+    System.out.println("Data memory:\n" + dataMemory_);
     System.out.println("Input tape:\n" + input_);
     System.out.println("Output tape:\n" + output_);
     System.out.println();
@@ -113,31 +122,31 @@ public class Alu {
 
   // RAM Simulator Instruction Set
   private void load() {
-    memory_.setAcc((int)opcode_.getValue());
+    dataMemory_.put(ACC, (int)opcode_.getValue());
   }
 
   private void store() {
-    memory_.putInRegister(opcode_.getArgument(0).getIndex(), memory_.getAcc());
+    dataMemory_.put(opcode_.getArgument(0).getIndex(), dataMemory_.get(ACC));
   }
 
   private void add() {
-    memory_.setAcc((int)opcode_.getValue() + memory_.getAcc());
+    dataMemory_.put(ACC, (int)opcode_.getValue() + dataMemory_.get(ACC));
   }
 
   private void sub() {
-    memory_.setAcc((int)opcode_.getValue() + memory_.getAcc());
+    dataMemory_.put(ACC, (int)opcode_.getValue() - dataMemory_.get(ACC));
   }
 
   private void mul() {
-    memory_.setAcc((int)opcode_.getValue() * memory_.getAcc());
+    dataMemory_.put(ACC, (int)opcode_.getValue() * dataMemory_.get(ACC));
   }
 
   private void div() {
-    memory_.setAcc((int)opcode_.getValue() / memory_.getAcc());
+    dataMemory_.put(ACC, (int)opcode_.getValue() / dataMemory_.get(ACC));
   }
 
   private void read() {
-    memory_.putInRegister(opcode_.getArgument(0).getIndex(), input_.read());
+    dataMemory_.put(opcode_.getArgument(0).getIndex(), input_.read());
   }
 
   private void write() {
@@ -145,18 +154,17 @@ public class Alu {
   }
 
   private void jump() {
-    System.out.println(memory_.getTag((String)opcode_.getValue()));
-    ip_ = memory_.getTag((String)opcode_.getValue());
+    ip_ = tags_.get((String)opcode_.getValue());
   }
 
   private void jzero() {
-    if (memory_.getAcc() == 0)
-      ip_ = memory_.getTag((String)opcode_.getValue());
+    if (dataMemory_.get(ACC) == 0)
+      ip_ = tags_.get((String)opcode_.getValue());
   }
 
   private void jgtz() {
-    if (memory_.getAcc() > 0)
-      ip_ = memory_.getTag((String)opcode_.getValue());
+    if (dataMemory_.get(ACC) > 0)
+      ip_ = tags_.get((String)opcode_.getValue());
   }
 
   public void halt() {

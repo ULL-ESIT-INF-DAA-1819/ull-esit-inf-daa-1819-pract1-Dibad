@@ -5,8 +5,9 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
-import Ramsim.Memory.MemoryManager;
+import Ramsim.Memory.Memory;
 import Ramsim.Io.InputUnit;
 import Ramsim.Io.OutputUnit;
 import Ramsim.Instruction.Operand.*;
@@ -16,16 +17,23 @@ import Ramsim.Instruction.InstructId;
 
 public class Ramsim {
   // Ram Simulator components
-  private MemoryManager memory_;
+  private Memory<Integer> dataMemory_;
+  private Memory<Opcode> programMemory_;
+  private HashMap<String, Integer> tags_;
   private InputUnit input_;
   private OutputUnit output_;
   private Alu alu_;
 
+
+  // Constructor
+
   public Ramsim(String programFilePath, String inputFilePath, String outputFilePath) {
-    memory_ = new MemoryManager();
+    dataMemory_ = new Memory<Integer>();
+    programMemory_ = new Memory<Opcode>();
+    tags_ = new HashMap<String, Integer>();
     input_ = new InputUnit(inputFilePath);
     output_ = new OutputUnit(outputFilePath);
-    alu_ = new Alu(memory_, input_, output_);
+    alu_ = new Alu(dataMemory_, programMemory_, tags_, input_, output_);
 
     loadProgram(programFilePath);
   }
@@ -35,7 +43,8 @@ public class Ramsim {
       try {
         alu_.cycle();
 
-      } catch (RuntimeException e) { // Handle exceptions better
+      } catch (RuntimeException e) {
+        System.out.println("An exception has occurred:");
         e.printStackTrace();
         alu_.halt();
       }
@@ -59,9 +68,9 @@ public class Ramsim {
           ArrayList<String> splitted = new
           ArrayList<String>(Arrays.asList(line.trim().split("\\s+")));
 
-          // Check if first element is a tag and save it
+          // Check if first element is a tag and store tag
           if (splitted.get(0).endsWith(":")) {
-            memory_.setTag(splitted.get(0).replace(":", ""), lineNumber);
+            tags_.put(splitted.get(0).replace(":", ""), lineNumber);
             splitted.remove(0);
           }
 
@@ -70,7 +79,7 @@ public class Ramsim {
           splitted.remove(0);
 
           // Get list of operands
-          ArrayList<Operand<?>> op = new ArrayList<Operand<?>>();
+          ArrayList<Operand<?>> operand = new ArrayList<Operand<?>>();
 
           if (!splitted.isEmpty()) {
             for (var arg : splitted) {
@@ -79,36 +88,36 @@ public class Ramsim {
 
                 // CONSTANT
                 if (firstChar == '=') {
-                  arg = arg.substring(1);
-                  op.add(new ConstOperand<Integer>(Integer.parseInt(arg)));
+                  arg = arg.substring(1); // Remove first character
+                  operand.add(new ConstOperand<>(Integer.parseInt(arg)));
 
                 } else if (firstChar == '*') {
-                  arg = arg.substring(1);
-                  op.add(new IndirectDirOperand<Integer>(Integer.parseInt(arg),
-                                                         memory_.dataMemory_));
+                  arg = arg.substring(1); // Remove first character
+                  operand.add(new IndirectDirOperand<>(Integer.parseInt(arg),
+                                                       dataMemory_));
                 }
 
                 else {
-                  op.add(new DirectDirOperand<Integer>(Integer.parseInt(arg),
-                                                       memory_.dataMemory_));
+                  operand.add(new DirectDirOperand<>(Integer.parseInt(arg),
+                                                     dataMemory_));
                 }
 
-                // If can't be saved as an int is a label (string)
+                // If can't be saved as an int must be a label (string)
               } catch (NumberFormatException e) {
-                op.add(new ConstOperand<String>(arg));
+                operand.add(new ConstOperand<>(arg));
               }
             }
           }
 
           // Save instruction in program memory
-          memory_.putInRegister(lineNumber, new Opcode(id, op));
+          programMemory_.put(lineNumber, new Opcode(id, operand));
           ++lineNumber;
         }
       }
 
-      System.out.println(lineNumber);
-      System.out.println("Program loaded!\n" + memory_.programMemory_.toString());
-      System.out.println("Tags:\n" + memory_.tags_);
+      System.out.println(String.format("Program loaded! %d instructions: %s",
+                                       lineNumber, programMemory_));
+      System.out.println("Tags:\n" + tags_ + "\n");
 
     } catch (IOException e) { // Handle exceptions better
       e.printStackTrace();
