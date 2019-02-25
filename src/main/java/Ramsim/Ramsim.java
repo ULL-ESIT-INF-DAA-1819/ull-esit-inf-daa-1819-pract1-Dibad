@@ -121,7 +121,7 @@ public class Ramsim {
 
                 // If can't be saved as an int must be a label (string)
               } catch (NumberFormatException e) {
-                operand.add(new ConstOperand<>(arg));
+                operand.add(new ConstOperand<String>(arg));
               }
             }
           }

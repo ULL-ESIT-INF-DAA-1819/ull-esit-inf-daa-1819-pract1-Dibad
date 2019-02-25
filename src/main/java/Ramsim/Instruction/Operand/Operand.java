@@ -1,3 +1,12 @@
+/**
+  * This class provides an abstraction layer for operands.
+  * Instructions don't need to know how operands work, just the value they
+  * return.
+  *
+  * @author David Afonso Dorta
+  * @since 2019-02-25
+  * e-mail: alu0101015255@ull.edu.es
+  */
 package Ramsim.Instruction.Operand;
 
 public abstract class Operand<T> {
