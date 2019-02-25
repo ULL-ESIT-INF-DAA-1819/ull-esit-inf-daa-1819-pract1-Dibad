@@ -17,6 +17,7 @@ public class Alu {
   private HashMap<String, Integer> tags_;
   private InputUnit input_;
   private OutputUnit output_;
+  private InstructionSet instructions_;
 
   // Alu attributes
   private Opcode opcode_;
@@ -44,12 +45,14 @@ public class Alu {
     tags_ = tags;
     input_ = input;
     output_ = output;
+    instructions_ = new InstructionSet();
+
     debug_ = debug;
   }
 
   public void cycle() throws IndexOutOfBoundsException {
     fetch();
-    execute();
+    instructions_.execute();
     if (debug_)
       printDebugState();
   }
@@ -69,6 +72,9 @@ public class Alu {
   public boolean isHalted() {
     return halt_;
   }
+  public void halt() {
+    instructions_.halt();
+  }
 
   public void printDebugState() {
     System.out.println(String.format("\t<< %s >>", opcode_));
@@ -82,134 +88,137 @@ public class Alu {
     System.out.println("\n");
   }
 
-  public void execute() {
-    // Get function pointer from opcode ID
-    switch (opcode_.getId()) {
-    case LOAD:
-      load();
-      break;
 
-    case STORE:
-      store();
-      break;
+  class InstructionSet {
+    public void execute() {
+      // Get function pointer from opcode ID
+      switch (opcode_.getId()) {
+      case LOAD:
+        load();
+        break;
 
-    case ADD:
-      add();
-      break;
+      case STORE:
+        store();
+        break;
 
-    case SUB:
-      sub();
-      break;
+      case ADD:
+        add();
+        break;
 
-    case MUL:
-      mul();
-      break;
+      case SUB:
+        sub();
+        break;
 
-    case DIV:
-      div();
-      break;
+      case MUL:
+        mul();
+        break;
 
-    case READ:
-      read();
-      break;
+      case DIV:
+        div();
+        break;
 
-    case WRITE:
-      write();
-      break;
+      case READ:
+        read();
+        break;
 
-    case JUMP:
-      jump();
-      break;
+      case WRITE:
+        write();
+        break;
 
-    case JZERO:
-      jzero();
-      break;
+      case JUMP:
+        jump();
+        break;
 
-    case JGTZ:
-      jgtz();
-      break;
+      case JZERO:
+        jzero();
+        break;
 
-    case HALT:
-      halt();
-      break;
+      case JGTZ:
+        jgtz();
+        break;
 
-    default:
-      throw new NoSuchElementException
-      ("Cannot find instruction with opcode " + opcode_.getId());
+      case HALT:
+        halt();
+        break;
+
+      default:
+        throw new NoSuchElementException
+        ("Cannot find instruction with opcode " + opcode_.getId());
+      }
     }
-  }
 
 
-  // RAM Simulator Instruction Set
-  private void load() {
-    dataMemory_.put(ACC, (int)opcode_.getValue());
-  }
-
-  private void store() {
-    dataMemory_.put(opcode_.getRegisterIndex(), dataMemory_.get(ACC));
-  }
-
-  private void add() {
-    dataMemory_.put(ACC, (int)opcode_.getValue() + dataMemory_.get(ACC));
-  }
-
-  private void sub() {
-    dataMemory_.put(ACC, dataMemory_.get(ACC) - (int)opcode_.getValue());
-  }
-
-  private void mul() {
-    dataMemory_.put(ACC, (int)opcode_.getValue() * dataMemory_.get(ACC));
-  }
-
-  private void div() {
-    dataMemory_.put(ACC, dataMemory_.get(ACC) / (int)opcode_.getValue());
-  }
-
-  private void read() {
-    int index = opcode_.getRegisterIndex();
-    if (index == Alu.ACC)
-      throw new IllegalArgumentException(
-        "READ Instruction can't be used with the ACC register!");
-
-    dataMemory_.put(opcode_.getRegisterIndex(), input_.read());
-  }
-
-  private void write() {
-    int index = Alu.ACC + 1; // Never the same value as ACC
-    try { // Workaround for silently catch exception when WRITE 0
-      index = opcode_.getRegisterIndex();
-    } catch (IllegalArgumentException e) {}
-
-    if (index == Alu.ACC)
-      throw new IllegalArgumentException(
-        "WRITE Instruction can't be used with the ACC register!");
-
-    output_.write((int)opcode_.getValue());
-  }
-
-  private void jump() {
-    try {
-      ip_ = tags_.get((String)opcode_.getValue());
-    } catch (ClassCastException e) {
-      throw new IllegalArgumentException(
-        "JUMP instruction must have a tag as argument!", e);
+    // RAM Simulator Instruction Set
+    private void load() {
+      dataMemory_.put(ACC, (int)opcode_.getValue());
     }
-  }
 
-  private void jzero() {
-    if (dataMemory_.get(ACC) == 0)
-      jump();
-  }
+    private void store() {
+      dataMemory_.put(opcode_.getRegisterIndex(), dataMemory_.get(ACC));
+    }
 
-  private void jgtz() {
-    if (dataMemory_.get(ACC) > 0)
-      jump();
-  }
+    private void add() {
+      dataMemory_.put(ACC, (int)opcode_.getValue() + dataMemory_.get(ACC));
+    }
 
-  public void halt() {
-    output_.storeTapeToFile();
-    System.out.println(String.format("FINISHED: %d instructions executed",
-                                     executedInstructions_));
-    halt_ = true;
+    private void sub() {
+      dataMemory_.put(ACC, dataMemory_.get(ACC) - (int)opcode_.getValue());
+    }
+
+    private void mul() {
+      dataMemory_.put(ACC, (int)opcode_.getValue() * dataMemory_.get(ACC));
+    }
+
+    private void div() {
+      dataMemory_.put(ACC, dataMemory_.get(ACC) / (int)opcode_.getValue());
+    }
+
+    private void read() {
+      int index = opcode_.getRegisterIndex();
+      if (index == Alu.ACC)
+        throw new IllegalArgumentException(
+          "READ Instruction can't be used with the ACC register!");
+
+      dataMemory_.put(opcode_.getRegisterIndex(), input_.read());
+    }
+
+    private void write() {
+      int index = Alu.ACC + 1; // Never the same value as ACC
+      try { // Workaround for silently catch exception when WRITE 0
+        index = opcode_.getRegisterIndex();
+      } catch (IllegalArgumentException e) {}
+
+      if (index == Alu.ACC)
+        throw new IllegalArgumentException(
+          "WRITE Instruction can't be used with the ACC register!");
+
+      output_.write((int)opcode_.getValue());
+    }
+
+    private void jump() {
+      try {
+        ip_ = tags_.get((String)opcode_.getValue());
+      } catch (ClassCastException e) {
+        throw new IllegalArgumentException(
+          "JUMP instruction must have a tag as argument!", e);
+      }
+    }
+
+    private void jzero() {
+      if (dataMemory_.get(ACC) == 0)
+        jump();
+    }
+
+    private void jgtz() {
+      if (dataMemory_.get(ACC) > 0)
+        jump();
+    }
+
+    public void halt() {
+      output_.storeTapeToFile();
+      System.out.println(String.format("FINISHED: %d instructions executed",
+                                       executedInstructions_));
+      halt_ = true;
+    }
   }
 }
