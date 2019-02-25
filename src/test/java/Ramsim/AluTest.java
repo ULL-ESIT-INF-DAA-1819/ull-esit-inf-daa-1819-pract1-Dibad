@@ -95,7 +95,7 @@ public class AluTest {
   class Store {
     @Test
     public void testStoreConst() {
-      // STORE =1: Almacena el ACC en la constante 1 [DEBE FALLAR]
+      // STORE =1: Put the value of the ACC in the constant 1 [MUST FAIL]
       args_.add(new ConstOperand<>(1));
       var opcode = new Opcode(InstructId.STORE, args_);
 
@@ -107,7 +107,7 @@ public class AluTest {
 
     @Test
     public void testStoreDirect() {
-      // STORE 1: Almacena el ACC en R1
+      // STORE 1: Store the ACC in R1
       args_.add(new DirectDirOperand<>(1, dataMemory_));
       var opcode = new Opcode(InstructId.STORE, args_);
 
@@ -119,7 +119,7 @@ public class AluTest {
 
     @Test
     public void testStoreIndirect() {
-      // STORE *1: Almacena el ACC en el Registro apuntado por R1
+      // STORE *1: Store the aCC in the register pointed by R1
       args_.add(new IndirectDirOperand<>(1, dataMemory_));
       var opcode = new Opcode(InstructId.STORE, args_);
 
@@ -135,7 +135,7 @@ public class AluTest {
   class Add {
     @Test
     public void testAddConstant() {
-      // Add =2: Suma 2 al valor del ACC y almacena el resultado en el ACC
+      // ADD =2: Suma 2 al valor del ACC y almacena el resultado en el ACC
       args_.add(new ConstOperand<>(2));
       var opcode = new Opcode(InstructId.ADD, args_);
 
@@ -147,7 +147,7 @@ public class AluTest {
 
     @Test
     public void testAddDirect() {
-      // Add 2: Suma el valor del Registro R2 al ACC y almacena el resultado en
+      // ADD 2: Suma el valor del Registro R2 al ACC y almacena el resultado en
       // el ACC
       args_.add(new DirectDirOperand<>(2, dataMemory_));
       var opcode = new Opcode(InstructId.ADD, args_);
@@ -160,7 +160,7 @@ public class AluTest {
 
     @Test
     public void testAddIndirect() {
-      // Add *2: Suma el valor del Registro apuntado por R2 al ACC y almacena el
+      // ADD *2: Suma el valor del Registro apuntado por R2 al ACC y almacena el
       // resultado en el ACC
       args_.add(new IndirectDirOperand<>(2, dataMemory_));
       var opcode = new Opcode(InstructId.ADD, args_);
@@ -177,7 +177,7 @@ public class AluTest {
   class Sub {
     @Test
     public void testSubConstant() {
-      // Sub =3: Subtract the constant 3 to the ACC and store the result in the
+      // SUB =3: Subtract the constant 3 to the ACC and store the result in the
       // ACC
       args_.add(new ConstOperand<>(3));
       var opcode = new Opcode(InstructId.SUB, args_);
@@ -190,7 +190,7 @@ public class AluTest {
 
     @Test
     public void testSubDirect() {
-      // Sub 3: Subtract the content of R3 to the ACC and store the result in
+      // SUB 3: Subtract the content of R3 to the ACC and store the result in
       // the ACC
       args_.add(new DirectDirOperand<>(3, dataMemory_));
       var opcode = new Opcode(InstructId.SUB, args_);
@@ -203,7 +203,7 @@ public class AluTest {
 
     @Test
     public void testSubIndirect() {
-      // Sub *3: Subtract the content of the Register pointed by R3 to the ACC
+      // SUB *3: Subtract the content of the Register pointed by R3 to the ACC
       // and store the result in the ACC
       args_.add(new IndirectDirOperand<>(3, dataMemory_));
       var opcode = new Opcode(InstructId.SUB, args_);
@@ -220,7 +220,7 @@ public class AluTest {
   class Mul {
     @Test
     public void testMulConstant() {
-      // Mul =3: Multiply the constant 3 with the ACC and store the result in
+      // MUL =3: Multiply the constant 3 with the ACC and store the result in
       // the ACC
       args_.add(new ConstOperand<>(3));
       var opcode = new Opcode(InstructId.MUL, args_);
@@ -233,7 +233,7 @@ public class AluTest {
 
     @Test
     public void testMulDirect() {
-      // Mul 3: Multiply the content of R3 with the ACC and store the result in
+      // MUL 3: Multiply the content of R3 with the ACC and store the result in
       // the ACC
       args_.add(new DirectDirOperand<>(3, dataMemory_));
       var opcode = new Opcode(InstructId.MUL, args_);
@@ -246,7 +246,7 @@ public class AluTest {
 
     @Test
     public void testMulIndirect() {
-      // Mul*3: Multiply the content of the Register pointed by R3 with the ACC
+      // MUL *3: Multiply the content of the Register pointed by R3 with the ACC
       // and store the result in the ACc
       args_.add(new IndirectDirOperand<>(3, dataMemory_));
       var opcode = new Opcode(InstructId.MUL, args_);
@@ -263,7 +263,7 @@ public class AluTest {
   class Div {
     @Test
     public void testDivConstant() {
-      // Div =1: Divide the constant 1 by the ACC and store the result in the
+      // DIV =1: Divide the constant 1 by the ACC and store the result in the
       // ACC
       args_.add(new ConstOperand<>(1));
       var opcode = new Opcode(InstructId.DIV, args_);
@@ -276,7 +276,7 @@ public class AluTest {
 
     @Test
     public void testDivDirect() {
-      // Div 1: Divide the content of R1 by the ACC and store the result in the
+      // DIV 1: Divide the content of R1 by the ACC and store the result in the
       // ACC
       args_.add(new DirectDirOperand<>(1, dataMemory_));
       var opcode = new Opcode(InstructId.DIV, args_);
@@ -289,7 +289,7 @@ public class AluTest {
 
     @Test
     public void testDivIndirect() {
-      // Div *1: Divide the content of the Register pointed by R1 by the ACC and
+      // DIV *1: Divide the content of the Register pointed by R1 by the ACC and
       // store the result in the ACC
       args_.add(new IndirectDirOperand<>(1, dataMemory_));
       var opcode = new Opcode(InstructId.DIV, args_);
@@ -306,7 +306,7 @@ public class AluTest {
   class Read {
     @Test
     public void testReadConstant() {
-      // Read =2: Read a value from the input tape and store it in the
+      // READ =2: Read a value from the input tape and store it in the
       // constant [MUST FAIL]
       args_.add(new ConstOperand<>(2));
       var opcode = new Opcode(InstructId.READ, args_);
@@ -319,7 +319,7 @@ public class AluTest {
 
     @Test
     public void testReadDirect() {
-      // Read 2: Read a value from the input tape and store it in the Register
+      // READ 2: Read a value from the input tape and store it in the Register
       // R2
       args_.add(new DirectDirOperand<>(2, dataMemory_));
       var opcode = new Opcode(InstructId.READ, args_);
@@ -332,7 +332,7 @@ public class AluTest {
 
     @Test
     public void testReadIndirect()  {
-      // Read *2: Read a value from the input tape and store it in the Register
+      // READ *2: Read a value from the input tape and store it in the Register
       // pointed by R2
       args_.add(new IndirectDirOperand<>(2, dataMemory_));
       var opcode = new Opcode(InstructId.READ, args_);
@@ -345,7 +345,7 @@ public class AluTest {
 
     @Test
     public void testReadToAccDirect() {
-      // Read 0: Read a value from the input tape and store it in the ACC
+      // READ 0: Read a value from the input tape and store it in the ACC
       // [MUST FAIL]
       args_.add(new DirectDirOperand<>(0, dataMemory_));
       var opcode = new Opcode(InstructId.READ, args_);
@@ -359,7 +359,7 @@ public class AluTest {
 
     @Test
     public void testReadToAccIndirect() {
-      // Read *1: Read a value from the input tape and store it in the Register
+      // READ *1: Read a value from the input tape and store it in the Register
       // pointed by R1 (which will be the ACC)
       args_.add(new IndirectDirOperand<>(1, dataMemory_));
       var opcode = new Opcode(InstructId.READ, args_);
@@ -379,7 +379,7 @@ public class AluTest {
   class Write {
     @Test
     public void testWriteConstant() {
-      // Write =2: Write the constant 1 to the output tape
+      // WRITE =2: Write the constant 1 to the output tape
       args_.add(new ConstOperand<>(2));
       var opcode = new Opcode(InstructId.WRITE, args_);
 
@@ -391,7 +391,7 @@ public class AluTest {
 
     @Test
     public void testWriteDirect() {
-      // Write 2: Write the content of R2 to the output tape
+      // WRITE 2: Write the content of R2 to the output tape
       args_.add(new DirectDirOperand<>(2, dataMemory_));
       var opcode = new Opcode(InstructId.WRITE, args_);
 
@@ -403,7 +403,7 @@ public class AluTest {
 
     @Test
     public void testWriteIndirect() {
-      // Write *2: Write the content of the Register pointed by R2 to the output
+      // WRITE *2: Write the content of the Register pointed by R2 to the output
       // tape
       args_.add(new IndirectDirOperand<>(2, dataMemory_));
       var opcode = new Opcode(InstructId.WRITE, args_);
@@ -416,7 +416,7 @@ public class AluTest {
 
     @Test
     public void testWriteFromAccDirect() {
-      // Write 0: Write the content of the ACC to the output tape [MUST FAIL]
+      // WRITE 0: Write the content of the ACC to the output tape [MUST FAIL]
       args_.add(new DirectDirOperand<>(0, dataMemory_));
       var opcode = new Opcode(InstructId.WRITE, args_);
 
@@ -428,7 +428,7 @@ public class AluTest {
 
     @Test
     public void testWriteFromAccIndirect() {
-      // Write *1: Write the content of the Register pointed by R1 (which will
+      // WRITE *1: Write the content of the Register pointed by R1 (which will
       // be the ACC) to the output tape [MUST FAIL]
       args_.add(new IndirectDirOperand<>(1, dataMemory_));
       var opcode = new Opcode(InstructId.WRITE, args_);
@@ -548,7 +548,7 @@ public class AluTest {
   class Jgtz {
     @Test
     public void testJgtzConstant() {
-      // Jgtz start: Jump to tag if ACC is greater than 0
+      // JGTZ start: Jump to tag if ACC is greater than 0
       args_.add(new ConstOperand<>("start"));
       var opcode = new Opcode(InstructId.JGTZ, args_);
 

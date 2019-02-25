@@ -47,23 +47,22 @@ public class Ramsim {
   }
 
   public void execute() {
-    while (!alu_.isHalted()) {
-      try {
+    try {
+      while (!alu_.isHalted())
         alu_.cycle();
 
-      } catch (RuntimeException e) {
-        System.out.println("RAMSIM::ERROR::An exception has occurred:");
-        if (debug_)
-          e.printStackTrace();
-        else
-          System.out.println(e);
+    } catch (RuntimeException e) {
+      System.out.println("-> Runtime Exception:");
+      if (debug_)
+        e.printStackTrace();
+      else
+        System.out.println(e);
 
-        System.out.println("\n   ALU STATE INFORMATION:");
-        alu_.printDebugState();
+      System.out.println("\n   ALU STATE INFORMATION:");
+      alu_.printDebugState();
 
-        alu_.halt();
-        throw e;
-      }
+      alu_.halt();
+      throw e;
     }
 
     System.out.println("Output:\n" + output_);

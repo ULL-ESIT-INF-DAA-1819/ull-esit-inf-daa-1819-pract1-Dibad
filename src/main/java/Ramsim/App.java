@@ -22,6 +22,9 @@ public class App {
 
     try {
       rms.execute();
-    } catch (Exception e) {} // Workaround for avoid showing exception twice
+
+    } catch (Exception e) {
+      System.out.println("RAMSIM::EXECUTE()::Exception:\n" + e);
+    }
   }
 }

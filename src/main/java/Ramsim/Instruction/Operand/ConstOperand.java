@@ -9,7 +9,8 @@ public class ConstOperand<T> extends Operand<T> {
 
   @Override
   public int getRegisterIndex() {
-    throw new IllegalArgumentException("Illegal operation!");
+    throw new IllegalArgumentException(
+      "Constant Operands doesn't have a register index!!");
   }
 
   @Override
