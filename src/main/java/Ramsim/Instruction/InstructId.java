@@ -4,7 +4,6 @@
   * @author David Afonso Dorta
   * @since 2019-02-25
   * e-mail: alu0101015255@ull.edu.es
-  *
   */
 package Ramsim.Instruction;
 
