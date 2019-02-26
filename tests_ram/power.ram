@@ -1,0 +1,26 @@
+# Programa que lee dos valores de la cinta de entrada (x e y) y computa
+# x^y. El resultado se almacenará en la cinta de salida. Si la operación no
+# pudiera llevarse a cabo imprime un -1
+
+
+        READ 1      # R1 = x
+        READ 2      # R2 = y
+        LOAD =1
+        STORE 3     # R3 = 1 (Will hold result)
+        LOAD 2
+        MUL  =-1
+        JGTZ error  # If y < 0, then y * y > 0
+loop:   LOAD 2
+        JZERO fin   # End when y == 0
+        SUB =1      # y - 1 (Iterator of the loop)
+        STORE 2
+        LOAD 3
+        MUL 1       # Mult R3 (result) by R1 (x)
+        STORE 3
+        JUMP loop
+
+fin:    WRITE 3     # Write the result to the output tape
+        HALT
+
+error:  WRITE =-1
+        HALT

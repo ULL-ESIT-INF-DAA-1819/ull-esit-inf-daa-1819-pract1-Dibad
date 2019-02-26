@@ -22,7 +22,7 @@ test {
 }
 
 run {
-  args = ["tests_ram/test1.ram", "input.txt", "output.txt", "0"]
+  args = ["tests_ram/power.ram", "input.txt", "output.txt", "1"]
 }
 // Define the main class for the application
 mainClassName = 'Ramsim.App'
