@@ -1,3 +1,11 @@
+/**
+  * This class acts as a Facade (Design Pattern) for the whole Ram Simulator,
+  * and helps to provide a clean interface for the user to interact with.
+  *
+  * @author David Afonso Dorta
+  * @since 2019-02-25
+  * e-mail: alu0101015255@ull.edu.es
+  */
 package Ramsim;
 
 import java.util.Arrays;
@@ -27,8 +35,10 @@ public class Ramsim {
   // Flags
   private boolean debug_;
 
-  // Constructor
-
+  /**
+    * Instantiate all the Ram Simulator components and the links (references)
+    * between them. Also try to load the Ram Program from memory
+    */
   public Ramsim(String programFilePath,
                 String inputFilePath,
                 String outputFilePath,
@@ -46,6 +56,10 @@ public class Ramsim {
     loadProgram(programFilePath);
   }
 
+  /**
+    * Method for executing the Ram Simulator when the program is loaded in
+    * memory.
+    */
   public void execute() {
     try {
       while (!alu_.isHalted())
@@ -68,6 +82,9 @@ public class Ramsim {
     System.out.println("Output:\n" + output_);
   }
 
+  /**
+    * Parse a file, ignore comments and transform each line to a Ram Instruction
+    */
   private void loadProgram(String programFilePath) {
     try(Scanner fileReader = new Scanner(new File(programFilePath))) {
 
