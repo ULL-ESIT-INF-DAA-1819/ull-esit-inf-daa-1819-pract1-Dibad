@@ -5,7 +5,8 @@
 This directory is organised as follows:
 
       .
-      ├── bib          # Assignment bibliography
-      ├── report       # LaTeX template for the report
-      ├── slides       # LaTeX Beamer template for the slides
-      ├── src          # Source code
+      ├── .settings       # Files for gradle project building
+      ├── docs            # Javadoc documentation files
+      ├── gradle/wrapper  # Files for executing ./gradlew
+      ├── src             # Source code (Implementation and Tests)
+      ├── tests_ram       # .ram files with example programs
