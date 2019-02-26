@@ -1,3 +1,9 @@
+package Ramsim.Io;
+
+import java.util.Scanner;
+import java.io.File;
+import java.io.IOException;
+
 /**
   * Provides the necessary methods for reading a file from the filesystem and
   * loading its content to a RAM tape
@@ -8,12 +14,6 @@
   *
   * @see Unit
   */
-package Ramsim.Io;
-
-import java.util.Scanner;
-import java.io.File;
-import java.io.IOException;
-
 public class InputUnit extends Unit {
   int readingHead_ = 0;
 

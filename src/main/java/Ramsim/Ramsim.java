@@ -1,11 +1,3 @@
-/**
-  * This class acts as a Facade (Design Pattern) for the whole Ram Simulator,
-  * and helps to provide a clean interface for the user to interact with.
-  *
-  * @author David Afonso Dorta
-  * @since 2019-02-25
-  * e-mail: alu0101015255@ull.edu.es
-  */
 package Ramsim;
 
 import java.util.Arrays;
@@ -23,6 +15,14 @@ import Ramsim.Instruction.Opcode;
 import Ramsim.Alu.Alu;
 import Ramsim.Instruction.InstructId;
 
+/**
+  * This class acts as a Facade (Design Pattern) for the whole Ram Simulator,
+  * and helps to provide a clean interface for the user to interact with.
+  *
+  * @author David Afonso Dorta
+  * @since 2019-02-25
+  * e-mail: alu0101015255@ull.edu.es
+  */
 public class Ramsim {
   // Ram Simulator components
   private Memory<Integer> dataMemory_;

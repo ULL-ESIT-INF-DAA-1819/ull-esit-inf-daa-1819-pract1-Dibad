@@ -1,3 +1,9 @@
+package Ramsim.Instruction;
+
+import java.util.ArrayList;
+
+import Ramsim.Instruction.Operand.Operand;
+
 /**
   * This class represents how an instruction is stored in memory. Its composed
   * of an unique ID and a variable list of arguments which can be of different
@@ -10,12 +16,6 @@
   * @see InstructId
   * @see Operand
   */
-package Ramsim.Instruction;
-
-import java.util.ArrayList;
-
-import Ramsim.Instruction.Operand.Operand;
-
 public class Opcode {
   private InstructId id_;
   private final ArrayList<Operand<?>> argument_;

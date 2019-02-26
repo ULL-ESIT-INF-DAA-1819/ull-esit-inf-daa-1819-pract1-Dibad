@@ -1,13 +1,3 @@
-/**
-  * Core class of the RAM Simulator. Implements the actual workload of the RAM
-  * Machine, connecting all the componentes together and fetching and executing
-  * the instructions from memory.
-  *
-  * @author David Afonso Dorta
-  * @since 2019-02-25
-  * e-mail: alu0101015255@ull.edu.es
-  *
-  */
 package Ramsim.Alu;
 
 import java.lang.ClassCastException;
@@ -20,6 +10,16 @@ import Ramsim.Instruction.Opcode;
 import Ramsim.Io.InputUnit;
 import Ramsim.Io.OutputUnit;
 
+/**
+  * Core class of the RAM Simulator. Implements the actual workload of the RAM
+  * Machine, connecting all the componentes together and fetching and executing
+  * the instructions from memory.
+  *
+  * @author David Afonso Dorta
+  * @since 2019-02-25
+  * e-mail: alu0101015255@ull.edu.es
+  *
+  */
 public class Alu {
   // Components
   private Memory<Integer> dataMemory_;

@@ -1,3 +1,7 @@
+package Ramsim.Memory;
+
+import java.util.HashMap;
+
 /**
   * Provides a simpler interface for using a HashMap as some sort of "memory".
   * It's indexed by Integers by default
@@ -7,10 +11,6 @@
   * e-mail: alu0101015255@ull.edu.es
   *
   */
-package Ramsim.Memory;
-
-import java.util.HashMap;
-
 public class Memory<T> {
   private HashMap<Integer, T> data_ = new HashMap<Integer, T>();
 

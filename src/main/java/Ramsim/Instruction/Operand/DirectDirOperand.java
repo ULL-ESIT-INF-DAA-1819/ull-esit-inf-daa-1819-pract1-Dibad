@@ -1,3 +1,7 @@
+package Ramsim.Instruction.Operand;
+
+import Ramsim.Memory.Memory;
+
 /**
   * Operator that works with registers in memory through 'direct addressing'.
   * This operator must hold a reference to the memory from where they should
@@ -9,10 +13,6 @@
   *
   * @see Operand
   */
-package Ramsim.Instruction.Operand;
-
-import Ramsim.Memory.Memory;
-
 public class DirectDirOperand<T> extends Operand<T> {
   private int index_;
   private Memory<T> memory_;

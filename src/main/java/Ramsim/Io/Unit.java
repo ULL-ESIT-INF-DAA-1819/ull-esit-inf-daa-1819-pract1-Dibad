@@ -1,3 +1,7 @@
+package Ramsim.Io;
+
+import java.util.ArrayList;
+
 /**
   * Class that provides basic structure for the interaction between files and
   * the RAM tap
@@ -7,10 +11,6 @@
   * e-mail: alu0101015255@ull.edu.es
   *
   */
-package Ramsim.Io;
-
-import java.util.ArrayList;
-
 public abstract class Unit {
   protected ArrayList<Integer> tape_ = new ArrayList<Integer>();
   protected String filepath_;

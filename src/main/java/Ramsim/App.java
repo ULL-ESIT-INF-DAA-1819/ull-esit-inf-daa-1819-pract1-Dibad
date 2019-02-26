@@ -1,3 +1,7 @@
+package Ramsim;
+
+import Ramsim.Ramsim;
+
 /**
   * Main class for loading RamSim programs
   *
@@ -5,10 +9,6 @@
   * @since 2019-02-25
   * e-mail: alu0101015255@ull.edu.es
   */
-package Ramsim;
-
-import Ramsim.Ramsim;
-
 public class App {
   public static void main(String[] args) {
     if (args.length != 4) { // This 4 arguments MUST be provided

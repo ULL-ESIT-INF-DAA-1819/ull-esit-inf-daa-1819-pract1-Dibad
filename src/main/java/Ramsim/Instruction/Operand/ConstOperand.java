@@ -1,3 +1,5 @@
+package Ramsim.Instruction.Operand;
+
 /**
   * Operator that works with constants ('1 - numeric', 'tag - string', ...)
   *
@@ -7,8 +9,6 @@
   *
   * @see Operand
   */
-package Ramsim.Instruction.Operand;
-
 public class ConstOperand<T> extends Operand<T> {
   private T constValue_;
 
