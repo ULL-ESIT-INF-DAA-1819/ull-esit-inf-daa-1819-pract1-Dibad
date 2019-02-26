@@ -1,4 +1,4 @@
-# Assignment structure
+# Práctica 1: Ram Machine Simulator
 
 This directory is organised as follows:
 
