@@ -1,0 +1,34 @@
+# Programa que recibe en la cinta de entrada un dividendo y un divisor y escribe
+# en la cinta de salida el cociente y el resto, sin utilizar la instruccion de DIV
+
+      READ 1      # R1 = dividendo
+      READ 2      # R2 = divisor
+      LOAD =0
+      STORE 3     # R3 = cociente (inicializado a 0)
+      LOAD =0
+      STORE 4     # R4 = resto (inicializado a 0)
+
+loop: LOAD 2
+      MUL 3
+      STORE 5     # R5 = divisor * cociente
+      LOAD 1
+      SUB 5       # ACC = dividendo - (divisor * cociente)
+      MUL =-1
+      JGTZ end    # Si el resto es negativo, se ha pasado el cociente
+      LOAD 3
+      ADD =1
+      STORE 3     # Aumentamos el cociente en 1 y recalculamos
+      JUMP loop
+
+end:  LOAD 3      # Restamos 1 al cociente (volver al último caso donde funciono)
+      SUB =1
+      STORE 3
+      LOAD 2      # divisor
+      MUL 3
+      STORE 5     # R5 = divisor * cociente
+      LOAD 1      # dividendo
+      SUB 5       # ACC = dividendo - (divisor * cociente)
+      STORE 4     # El resultado es el resto que lo guardamos en R4
+      WRITE 3
+      WRITE 4
+      HALT
