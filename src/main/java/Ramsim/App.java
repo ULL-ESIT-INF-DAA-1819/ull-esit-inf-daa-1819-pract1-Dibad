@@ -22,9 +22,8 @@ public class App {
     String outputTape = args[2];
     boolean debug = args[3].equals("1");
 
-    Ramsim rms = new Ramsim(ramProgram, inputTape, outputTape, debug);
-
     try {
+      Ramsim rms = new Ramsim(ramProgram, inputTape, outputTape, debug);
       rms.execute();
 
     } catch (Exception e) { // Most error printing is done in lower levels
